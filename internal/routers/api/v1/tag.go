@@ -10,7 +10,9 @@ func NewTag() Tag {
 	return Tag{}
 }
 
-func (t Tag) Get(c *gin.Context) {}
+// URL -> 路由 -> Handler
+func (t Tag) Get(c *gin.Context) {
+}
 func (t Tag) List(c *gin.Context) {}
 func (t Tag) Create(c *gin.Context) {}
 func (t Tag) Update(c *gin.Context) {}

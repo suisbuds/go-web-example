@@ -2,6 +2,10 @@ module github.com/suisbuds/miao
 
 go 1.23.2
 
+replace(
+	
+)
+
 require (
 	github.com/bytedance/sonic v1.12.3 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
