@@ -6,7 +6,7 @@ type Setting struct {
 	vp *viper.Viper
 }
 
-// Viper 读取配置
+// Viper 读取配置文件 config.yaml
 func NewSetting() (*Setting, error) {
 	vp := viper.New()
 	vp.SetConfigName("config")

@@ -5,18 +5,18 @@ Server:
   WriteTimeout: 60
 App:
   DefaultPageSize: 10
-  MaxPageSize: 100
+  MaxPageSize: 100  # 每页最多显示100条记录
   LogSavePath: storage/logs
   LogFileName: app
-  LogFileExt: .log
+  LogFileExt: .log  # 日志扩展名
 Database:
   DBType: postgres
   Username: postgres  
-  Password:   #
+  Password:   
   Host: 127.0.0.1:5432
   DBName: miao
   TablePrefix: miao_
   Charset: utf8
-  ParseTime: True
-  MaxIdleConns: 10
-  MaxOpenConns: 30
+  ParseTime: True  # 解析时间
+  MaxIdleConns: 10  # 数据库连接池最大空闲连接数
+  MaxOpenConns: 30  # 数据库连接池最大打开连接数
