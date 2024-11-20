@@ -28,10 +28,11 @@ type DatabaseSetting struct {
 	UserName     string
 	Password     string
 	Host         string
+	Port         string
 	DBName       string
 	TablePrefix  string
-	Charset      string
-	ParseTime    bool
+	SSLMode      string
+	TimeZone     string
 	MaxIdleConns int
 	MaxOpenConns int
 }

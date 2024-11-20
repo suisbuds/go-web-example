@@ -22,6 +22,10 @@ func init() {
 	if err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
 	}
+	err = testDBConnection()
+	if err != nil {
+		log.Fatalf("init.testDBConnection err: %v", err)
+	}
 }
 
 func main() {
@@ -78,5 +82,19 @@ func setupDBEngine() error {
 		return err
 	}
 
+	return nil
+}
+
+// 测试数据库连接
+func testDBConnection() error {
+	sqlDB, err := global.DBEngine.DB()
+	if err != nil {
+		return err
+	}
+	err = sqlDB.Ping()
+	if err != nil {
+		return err
+	}
+	fmt.Println("Database connection successful!")
 	return nil
 }

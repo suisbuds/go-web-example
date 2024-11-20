@@ -23,17 +23,13 @@ type Model struct {
 
 func NewDBEngine(databaseSetting *setting.DatabaseSetting) (*gorm.DB, error) {
 
-	dsn := fmt.Sprintf("host=%s user=%s dbname=%s port=5432 sslmode=disable charset=%s parseTime=%t",
+	dsn := fmt.Sprintf("host=%s user=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
 		databaseSetting.Host,
 		databaseSetting.UserName,
 		databaseSetting.DBName,
-		databaseSetting.Charset,
-		databaseSetting.ParseTime)
-
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		return nil, err
-	}
+		databaseSetting.Port,
+		databaseSetting.SSLMode,
+		databaseSetting.TimeZone)
 
 	var logMode logger.Interface
 	if global.ServerSetting.RunMode == "debug" {
@@ -41,7 +37,11 @@ func NewDBEngine(databaseSetting *setting.DatabaseSetting) (*gorm.DB, error) {
 	} else {
 		logMode = logger.Default.LogMode(logger.Silent)
 	}
-	db.Logger = logMode
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: logMode})
+	if err != nil {
+		return nil, err
+	}
 
 	sqlDB, err := db.DB()
 	if err != nil {
