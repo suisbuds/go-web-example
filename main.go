@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -10,7 +9,9 @@ import (
 	"github.com/suisbuds/miao/global"
 	"github.com/suisbuds/miao/internal/models"
 	"github.com/suisbuds/miao/internal/routers"
+	"github.com/suisbuds/miao/pkg/logger"
 	"github.com/suisbuds/miao/pkg/setting"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func init() {
@@ -18,13 +19,13 @@ func init() {
 	if err != nil {
 		log.Fatalf("init.setupSetting err: %v", err)
 	}
+	err = setupLogger()
+	if err != nil {
+		log.Fatalf("init.setupLogger err: %v", err)
+	}
 	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
-	}
-	err = testDBConnection()
-	if err != nil {
-		log.Fatalf("init.testDBConnection err: %v", err)
 	}
 }
 
@@ -39,10 +40,12 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	fmt.Printf("ServerSetting: %+v\n", global.ServerSetting)
-	fmt.Printf("AppSetting: %+v\n", global.AppSetting)
-	fmt.Printf("DatabaseSetting: %+v\n", global.DatabaseSetting)
+	global.Logger.Logf(logger.DEBUG, "%s: miao_blog/%s", "suisbuds", "miao")
+	// fmt.Printf("ServerSetting: %+v\n", global.ServerSetting)
+	// fmt.Printf("AppSetting: %+v\n", global.AppSetting)
+	// fmt.Printf("DatabaseSetting: %+v\n", global.DatabaseSetting)
 	s.ListenAndServe()
+
 }
 
 func setupSetting() error {
@@ -69,6 +72,13 @@ func setupSetting() error {
 }
 
 func setupLogger() error {
+	global.Logger = logger.NewLogger(&lumberjack.Logger{
+		Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+		MaxSize:   600,
+		MaxAge:    10,
+		LocalTime: true,
+	}, "", log.LstdFlags).WithCaller(2)
+
 	return nil
 }
 
@@ -82,19 +92,5 @@ func setupDBEngine() error {
 		return err
 	}
 
-	return nil
-}
-
-// 测试数据库连接
-func testDBConnection() error {
-	sqlDB, err := global.DBEngine.DB()
-	if err != nil {
-		return err
-	}
-	err = sqlDB.Ping()
-	if err != nil {
-		return err
-	}
-	fmt.Println("Database connection successful!")
 	return nil
 }
