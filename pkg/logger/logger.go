@@ -1,11 +1,20 @@
 package logger
 
+/*
+1. 日志分级
+2. 日志标准化
+3. 日志格式化和输出
+4.日志分级输出
+*/
+
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"runtime"
+	"time"
 )
 
 const (
@@ -88,8 +97,10 @@ func (l *Logger) WithContext(ctx context.Context) *Logger {
 func (l *Logger) WithCaller(skip int) *Logger {
 	nl := l.clone()
 
+	// 获取调用堆栈信息
 	pc, file, line, ok := runtime.Caller(skip)
 	if ok {
+		// 获取函数信息
 		f := runtime.FuncForPC(pc)
 		nl.callers = []string{fmt.Sprintf("%s: %d %s", file, line, f.Name())}
 	}
@@ -104,7 +115,7 @@ func (l *Logger) WithCallersFrames() *Logger {
 	callers := []string{}
 
 	pcs := make([]uintptr, maxCallerDepth)
-	// 获取调用堆栈的程序计数器
+	// 获取调用堆栈的程序计数器 pcs
 	depth := runtime.Callers(minCallerDepth, pcs)
 	// 程序计数器转换为调用堆栈帧
 	frames := runtime.CallersFrames(pcs[:depth])
@@ -120,4 +131,44 @@ func (l *Logger) WithCallersFrames() *Logger {
 	nl := l.clone()
 	nl.callers = callers
 	return nl
+}
+
+func (l *Logger) JSONFormat(level Level, message string) map[string]interface{} {
+	// 创建日志 map
+	data := make(Fields, len(l.fields)+4)
+	data["level"] = level.String()
+	data["time"] = time.Now().Local().UnixNano()
+	data["message"] = message
+	data["callers"] = l.callers
+
+	for k, v := range l.fields {
+		// 避免覆盖
+		if _, ok := data[k]; !ok {
+			data[k] = v
+		}
+	}
+
+	return data
+}
+
+func (l *Logger) Output(level Level, message string) {
+	// 生成格式化的日志，转换为 JSON 字符串
+	body, _ := json.Marshal(l.JSONFormat(level, message))
+	content := string(body)
+	switch level {
+	case FATAL:
+		l.baseLogger.Fatal(content)
+	case PANIC:
+		l.baseLogger.Panic(content)
+	default:
+		l.baseLogger.Print(content)
+	}
+}
+
+func (l *Logger) Log(level Level, v ...interface{}) {
+	l.Output(level, fmt.Sprint(v...))
+}
+
+func (l *Logger) Logf(level Level, format string, v ...interface{}) {
+	l.Output(level, fmt.Sprintf(format, v...))
 }
