@@ -3,6 +3,7 @@ package global
 import (
 	"github.com/suisbuds/miao/pkg/logger"
 	"github.com/suisbuds/miao/pkg/setting"
+	"go.uber.org/zap"
 )
 
 var (
@@ -10,4 +11,5 @@ var (
 	AppSetting      *setting.AppSetting
 	DatabaseSetting *setting.DatabaseSetting
 	Logger 		*logger.Logger
+	Za *zap.SugaredLogger
 )

@@ -15,6 +15,7 @@ import (
 	"log"
 	"runtime"
 	"time"
+
 )
 
 const (
@@ -31,7 +32,7 @@ type Level int8
 type Fields map[string]interface{}
 
 type Logger struct {
-	baseLogger *log.Logger
+	base *log.Logger
 	ctx        context.Context
 	fields     Fields   // 公共字段
 	callers    []string // 调用堆栈
@@ -46,7 +47,7 @@ var levels = [...]string{
 	"panic",
 }
 
-func (l Level) String() string {
+func (l Level) getString() string {
 	if l < DEBUG || l > PANIC {
 		return "unknown"
 	}
@@ -55,7 +56,7 @@ func (l Level) String() string {
 
 func NewLogger(w io.Writer, prefix string, flag int) *Logger {
 	l := log.New(w, prefix, flag)
-	return &Logger{baseLogger: l}
+	return &Logger{base: l}
 }
 
 func (l *Logger) clone() *Logger {
@@ -110,13 +111,13 @@ func (l *Logger) WithCaller(skip int) *Logger {
 
 // 完整的调用栈
 func (l *Logger) WithCallersFrames() *Logger {
-	minCallerDepth := 1
-	maxCallerDepth := 25
+	minDepth := 1
+	maxDepth := 25
 	callers := []string{}
 
-	pcs := make([]uintptr, maxCallerDepth)
+	pcs := make([]uintptr, maxDepth)
 	// 获取调用堆栈的程序计数器 pcs
-	depth := runtime.Callers(minCallerDepth, pcs)
+	depth := runtime.Callers(minDepth, pcs)
 	// 程序计数器转换为调用堆栈帧
 	frames := runtime.CallersFrames(pcs[:depth])
 
@@ -133,10 +134,9 @@ func (l *Logger) WithCallersFrames() *Logger {
 	return nl
 }
 
-func (l *Logger) JSONFormat(level Level, message string) map[string]interface{} {
-	// 创建日志 map
+func (l *Logger) format(level Level, message string) map[string]interface{} {
 	data := make(Fields, len(l.fields)+4)
-	data["level"] = level.String()
+	data["level"] = level.getString()
 	data["time"] = time.Now().Local().UnixNano()
 	data["message"] = message
 	data["callers"] = l.callers
@@ -151,24 +151,24 @@ func (l *Logger) JSONFormat(level Level, message string) map[string]interface{} 
 	return data
 }
 
-func (l *Logger) Output(level Level, message string) {
+func (l *Logger) output(level Level, message string) {
 	// 生成格式化的日志，转换为 JSON 字符串
-	body, _ := json.Marshal(l.JSONFormat(level, message))
+	body, _ := json.Marshal(l.format(level, message))
 	content := string(body)
 	switch level {
 	case FATAL:
-		l.baseLogger.Fatal(content)
+		l.base.Fatal(content)
 	case PANIC:
-		l.baseLogger.Panic(content)
+		l.base.Panic(content)
 	default:
-		l.baseLogger.Print(content)
+		l.base.Print(content)
 	}
 }
 
 func (l *Logger) Log(level Level, v ...interface{}) {
-	l.Output(level, fmt.Sprint(v...))
+	l.output(level, fmt.Sprint(v...))
 }
 
 func (l *Logger) Logf(level Level, format string, v ...interface{}) {
-	l.Output(level, fmt.Sprintf(format, v...))
+	l.output(level, fmt.Sprintf(format, v...))
 }

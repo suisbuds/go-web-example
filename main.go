@@ -1,17 +1,19 @@
 package main
 
 import (
-	"log"
-	"net/http"
-	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/suisbuds/miao/global"
 	"github.com/suisbuds/miao/internal/models"
 	"github.com/suisbuds/miao/internal/routers"
 	"github.com/suisbuds/miao/pkg/logger"
 	"github.com/suisbuds/miao/pkg/setting"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
+
+	"log"
+	"net/http"
+	"time"
 )
 
 func init() {
@@ -27,6 +29,10 @@ func init() {
 	if err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
 	}
+	err = setupZap()
+	if err != nil {
+		log.Fatalf("init.setupZap err: %v", err)
+	}
 }
 
 func main() {
@@ -41,11 +47,8 @@ func main() {
 	}
 
 	global.Logger.Logf(logger.DEBUG, "%s: miao_blog/%s", "suisbuds", "miao")
-	// fmt.Printf("ServerSetting: %+v\n", global.ServerSetting)
-	// fmt.Printf("AppSetting: %+v\n", global.AppSetting)
-	// fmt.Printf("DatabaseSetting: %+v\n", global.DatabaseSetting)
+	global.Za.Debugf("%s: miao_blog/%s", "suisbuds", "miao")
 	s.ListenAndServe()
-
 }
 
 func setupSetting() error {
@@ -65,27 +68,58 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
-
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
 	return nil
 }
 
 func setupLogger() error {
-	global.Logger = logger.NewLogger(&lumberjack.Logger{
-		Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
-		MaxSize:   600,
-		MaxAge:    10,
-		LocalTime: true,
-	}, "", log.LstdFlags).WithCaller(2)
+	// Viper 读取配置
+	global.Logger = logger.NewLogger(
+		&lumberjack.Logger{
+			Filename:   global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+			MaxSize:    600,
+			MaxBackups: 3,
+			MaxAge:     10,
+			LocalTime:  true,
+			Compress:   true,
+		},
+		"",
+		log.LstdFlags,
+	)
 
 	return nil
 }
 
-func setupDBEngine() error {
+func setupZap() error {
+	writeSyncer := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+		MaxSize:    600,
+		MaxBackups: 3,
+		MaxAge:     10,
+		Compress:   true,
+	})
 
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.TimeKey = "time"
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+
+	core := zapcore.NewCore(
+		zapcore.NewJSONEncoder(encoderConfig),
+		writeSyncer,
+		zap.DebugLevel,
+	)
+
+	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(0))
+	defer logger.Sync() // flushes buffer, if any
+
+	global.Za = logger.Sugar()
+	return nil
+}
+
+func setupDBEngine() error {
 	var err error
-	// 全局变量赋值
+
 	global.DBEngine, err = models.NewDBEngine(global.DatabaseSetting)
 
 	if err != nil {

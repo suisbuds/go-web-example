@@ -3,12 +3,14 @@ Server:
   HttpPort: 8000
   ReadTimeout: 60
   WriteTimeout: 60
+
 App:
   DefaultPageSize: 10
   MaxPageSize: 100  # 每页最多显示100条记录
   LogSavePath: storage/logs
   LogFileName: app
   LogFileExt: .log  # 日志扩展名
+
 Database:
   DBType: postgres
   Username: postgres  
