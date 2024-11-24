@@ -1,12 +1,10 @@
 package setting
 
+// 读取 config.yaml
+
 import (
 	"time"
 )
-
-/*
-* 声明配置属性，读取区间配置
- */
 
 type ServerSetting struct {
 	RunMode      string
@@ -19,7 +17,8 @@ type AppSetting struct {
 	DefaultPageSize int
 	MaxPageSize     int
 	LogSavePath     string
-	LogFileName     string
+	LoggerFileName     string
+	ZapperFileName     string
 	LogFileExt      string
 }
 

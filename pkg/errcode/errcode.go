@@ -15,7 +15,6 @@ type Error struct {
 var codes = map[int]string{} 
 
 func NewError(code int, msg string) *Error {
-	// 去重
 	if _, ok := codes[code]; ok {
 		panic(fmt.Sprintf("errcode %d exists, change it", code))
 	}
@@ -64,11 +63,11 @@ func (e *Error) StatusCode() int {
 	case InvalidParams.Code():
 		return http.StatusBadRequest
 	case UnauthorizedAuthNotExist.Code():
-		fallthrough
+		fallthrough // 下一个 case
 	case UnauthorizedTokenError.Code():
 		fallthrough
 	case UnauthorizedTokenGenerate.Code():
-		fallthrough // 下一个 case
+		fallthrough 
 	case UnauthorizedTokenTimeout.Code():
 		return http.StatusUnauthorized
 	case TooManyRequests.Code():

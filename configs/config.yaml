@@ -6,10 +6,11 @@ Server:
 
 App:
   DefaultPageSize: 10
-  MaxPageSize: 100  # 每页最多显示100条记录
+  MaxPageSize: 100  # 每页100条记录
   LogSavePath: storage/logs
-  LogFileName: app
-  LogFileExt: .log  # 日志扩展名
+  LoggerFileName: app_logger
+  ZapperFileName: app_zapper
+  LogFileExt: .log  # 扩展名
 
 Database:
   DBType: postgres
@@ -21,5 +22,5 @@ Database:
   TablePrefix: miao_
   SSLmode: disable
   TimeZone: Asia/Shanghai
-  MaxIdleConns: 10  # 数据库连接池最大空闲连接数
-  MaxOpenConns: 30  # 数据库连接池最大打开连接数
+  MaxIdleConns: 10  # 空闲连接数
+  MaxOpenConns: 30  # 打开连接数

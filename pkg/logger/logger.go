@@ -15,7 +15,6 @@ import (
 	"log"
 	"runtime"
 	"time"
-
 )
 
 const (
@@ -27,15 +26,20 @@ const (
 	PANIC
 )
 
+const (
+	SINGLE = "single"
+	FRAMES = "frames"
+)
+
 type Level int8
 
 type Fields map[string]interface{}
 
 type Logger struct {
-	base *log.Logger
-	ctx        context.Context
-	fields     Fields   // 公共字段
-	callers    []string // 调用堆栈
+	base    *log.Logger
+	ctx     context.Context
+	fields  Fields   // 公共字段
+	callers []string // 调用堆栈
 }
 
 var levels = [...]string{
@@ -151,24 +155,31 @@ func (l *Logger) format(level Level, message string) map[string]interface{} {
 	return data
 }
 
-func (l *Logger) output(level Level, message string) {
+func (l *Logger) output(level Level, mode string, message string) {
+	var nl *Logger
+	switch mode {
+	case SINGLE:
+		nl = l.WithCaller(3)
+	case FRAMES:
+		nl = l.WithCallersFrames()
+	}
 	// 生成格式化的日志，转换为 JSON 字符串
-	body, _ := json.Marshal(l.format(level, message))
+	body, _ := json.Marshal(nl.format(level, message))
 	content := string(body)
 	switch level {
 	case FATAL:
-		l.base.Fatal(content)
+		nl.base.Fatal(content)
 	case PANIC:
-		l.base.Panic(content)
+		nl.base.Panic(content)
 	default:
-		l.base.Print(content)
+		nl.base.Print(content)
 	}
 }
 
-func (l *Logger) Log(level Level, v ...interface{}) {
-	l.output(level, fmt.Sprint(v...))
+func (l *Logger) Log(level Level, mode string, v ...interface{}) {
+	l.output(level, mode, fmt.Sprint(v...))
 }
 
-func (l *Logger) Logf(level Level, format string, v ...interface{}) {
-	l.output(level, fmt.Sprintf(format, v...))
+func (l *Logger) Logf(level Level, mode string, format string, v ...interface{}) {
+	l.output(level, mode, fmt.Sprintf(format, v...))
 }

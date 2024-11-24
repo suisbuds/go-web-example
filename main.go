@@ -46,8 +46,8 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	global.Logger.Logf(logger.DEBUG, "%s: miao_blog/%s", "suisbuds", "miao")
-	global.Za.Debugf("%s: miao_blog/%s", "suisbuds", "miao")
+	global.Logger.Logf(logger.DEBUG, logger.SINGLE, "%s: miao_blog/%s", "suisbuds", "miao")
+	global.Zapper.Debugf("%s: miao_blog/%s", "suisbuds", "miao")
 	s.ListenAndServe()
 }
 
@@ -77,12 +77,11 @@ func setupLogger() error {
 	// Viper 读取配置
 	global.Logger = logger.NewLogger(
 		&lumberjack.Logger{
-			Filename:   global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
-			MaxSize:    600,
-			MaxBackups: 3,
-			MaxAge:     10,
-			LocalTime:  true,
-			Compress:   true,
+			Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LoggerFileName + global.AppSetting.LogFileExt,
+			MaxSize:   600,
+			MaxAge:    10,
+			LocalTime: true,
+			Compress:  true,
 		},
 		"",
 		log.LstdFlags,
@@ -92,28 +91,30 @@ func setupLogger() error {
 }
 
 func setupZap() error {
+	// zap 日志写入，lumberjack 管理日志滚动
 	writeSyncer := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
-		MaxSize:    600,
-		MaxBackups: 3,
-		MaxAge:     10,
-		Compress:   true,
+		Filename: global.AppSetting.LogSavePath + "/" + global.AppSetting.ZapperFileName + global.AppSetting.LogFileExt,
+		MaxSize:  600,
+		MaxAge:   10,
+		Compress: true,
 	})
-
+	// zap 编码器
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.TimeKey = "time"
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-
+	// zap 核心
 	core := zapcore.NewCore(
 		zapcore.NewJSONEncoder(encoderConfig),
 		writeSyncer,
 		zap.DebugLevel,
 	)
-
+	// 创建日志记录器
 	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(0))
-	defer logger.Sync() // flushes buffer, if any
+	// 刷新日志缓冲区
+	defer logger.Sync()
 
-	global.Za = logger.Sugar()
+	// 转换为 SugaredLogger 并赋值给 Zapper
+	global.Zapper = logger.Sugar()
 	return nil
 }
 

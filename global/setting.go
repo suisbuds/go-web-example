@@ -11,5 +11,5 @@ var (
 	AppSetting      *setting.AppSetting
 	DatabaseSetting *setting.DatabaseSetting
 	Logger 		*logger.Logger
-	Za *zap.SugaredLogger
+	Zapper *zap.SugaredLogger
 )
