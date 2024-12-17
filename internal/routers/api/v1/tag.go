@@ -12,6 +12,14 @@ func NewTag() Tag {
 
 // URL -> 路由 -> Handler
 
+
+// @Summary 获取单个标签
+// @Produce  json
+// @Param id path int true "标签 ID"
+// @Success 200 {object} model.Tag "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/v1/tags/{id} [get]
 func (t Tag) Get(c *gin.Context) {
 }
 
