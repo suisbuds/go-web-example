@@ -35,6 +35,10 @@ func init() {
 	}
 }
 
+// @title miao
+// @version 1.0
+// @description My own Miao Blog
+// @termsOfService https://github.com/suisbuds/miao
 func main() {
 	gin.SetMode(global.ServerSetting.RunMode)
 	router := routers.NewRouter()
