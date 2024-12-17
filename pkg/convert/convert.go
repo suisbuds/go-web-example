@@ -2,6 +2,8 @@ package convert
 
 import "strconv"
 
+// 对接口返回的结果进行类型转换
+
 type ConvertStr string
 
 func (s ConvertStr) String() string {
