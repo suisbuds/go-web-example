@@ -12,14 +12,16 @@ func NewRouter() *gin.Engine {
 
 	article := v1.NewArticle()
 	tag := v1.NewTag()
+
 	// 测试接口
 	apiv1 := r.Group("/api/v1")
 	{
 		apiv1.POST("/tags", tag.Create)
-		apiv1.DELETE("/tags/:id", tag.Delete)
+		// apiv1.DELETE("/tags/:id", tag.Delete)
 
-		apiv1.POST("/articles", article.Create)
-		apiv1.DELETE("/articles/:id", article.Delete)
+		apiv1.GET("/articles/:id", article.Get)
+		// apiv1.POST("/articles", article.Create)
+		// apiv1.DELETE("/articles/:id", article.Delete)
 	}
 
 	return r
