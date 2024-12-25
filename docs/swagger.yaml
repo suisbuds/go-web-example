@@ -1,4 +1,13 @@
 definitions:
+  app.Pager:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total_rows:
+        type: integer
+    type: object
   errcode.Error:
     type: object
   models.Article:
@@ -28,6 +37,15 @@ definitions:
       title:
         type: string
     type: object
+  models.ArticleSwagger:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.Article'
+        type: array
+      pager:
+        $ref: '#/definitions/app.Pager'
+    type: object
   models.Tag:
     properties:
       created_by:
@@ -48,6 +66,15 @@ definitions:
         type: string
       state:
         type: integer
+    type: object
+  models.TagSwagger:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+      pager:
+        $ref: '#/definitions/app.Pager'
     type: object
 info:
   contact: {}
@@ -85,7 +112,7 @@ paths:
         "200":
           description: 成功
           schema:
-            $ref: '#/definitions/models.Article'
+            $ref: '#/definitions/models.ArticleSwagger'
         "400":
           description: 请求错误
           schema:
@@ -143,7 +170,7 @@ paths:
         "200":
           description: 成功
           schema:
-            $ref: '#/definitions/models.Article'
+            $ref: '#/definitions/models.ArticleSwagger'
         "400":
           description: 请求错误
           schema:
@@ -190,7 +217,7 @@ paths:
         "200":
           description: 成功
           schema:
-            $ref: '#/definitions/models.Article'
+            $ref: '#/definitions/models.ArticleSwagger'
         "400":
           description: 请求错误
           schema:
@@ -239,7 +266,7 @@ paths:
         "200":
           description: 成功
           schema:
-            $ref: '#/definitions/models.Article'
+            $ref: '#/definitions/models.ArticleSwagger'
         "400":
           description: 请求错误
           schema:
@@ -279,7 +306,7 @@ paths:
         "200":
           description: 成功
           schema:
-            $ref: '#/definitions/models.Tag'
+            $ref: '#/definitions/models.TagSwagger'
         "400":
           description: 请求错误
           schema:
@@ -322,7 +349,7 @@ paths:
         "200":
           description: 成功
           schema:
-            $ref: '#/definitions/models.Tag'
+            $ref: '#/definitions/models.TagSwagger'
         "400":
           description: 请求错误
           schema:
@@ -369,7 +396,7 @@ paths:
         "200":
           description: 成功
           schema:
-            $ref: '#/definitions/models.Tag'
+            $ref: '#/definitions/models.TagSwagger'
         "400":
           description: 请求错误
           schema:
@@ -417,7 +444,7 @@ paths:
           description: 成功
           schema:
             items:
-              $ref: '#/definitions/models.Tag'
+              $ref: '#/definitions/models.TagSwagger'
             type: array
         "400":
           description: 请求错误

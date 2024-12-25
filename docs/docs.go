@@ -58,7 +58,7 @@ const docTemplate = `{
                     "200": {
                         "description": "成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Article"
+                            "$ref": "#/definitions/models.ArticleSwagger"
                         }
                     },
                     "400": {
@@ -147,7 +147,7 @@ const docTemplate = `{
                     "200": {
                         "description": "成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Article"
+                            "$ref": "#/definitions/models.ArticleSwagger"
                         }
                     },
                     "400": {
@@ -184,7 +184,7 @@ const docTemplate = `{
                     "200": {
                         "description": "成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Article"
+                            "$ref": "#/definitions/models.ArticleSwagger"
                         }
                     },
                     "400": {
@@ -261,7 +261,7 @@ const docTemplate = `{
                     "200": {
                         "description": "成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Article"
+                            "$ref": "#/definitions/models.ArticleSwagger"
                         }
                     },
                     "400": {
@@ -356,7 +356,7 @@ const docTemplate = `{
                     "200": {
                         "description": "成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Tag"
+                            "$ref": "#/definitions/models.TagSwagger"
                         }
                     },
                     "400": {
@@ -419,7 +419,7 @@ const docTemplate = `{
                     "200": {
                         "description": "成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Tag"
+                            "$ref": "#/definitions/models.TagSwagger"
                         }
                     },
                     "400": {
@@ -456,7 +456,7 @@ const docTemplate = `{
                     "200": {
                         "description": "成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Tag"
+                            "$ref": "#/definitions/models.TagSwagger"
                         }
                     },
                     "400": {
@@ -527,7 +527,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Tag"
+                                "$ref": "#/definitions/models.TagSwagger"
                             }
                         }
                     },
@@ -583,6 +583,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "app.Pager": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "type": "integer"
+                }
+            }
+        },
         "errcode.Error": {
             "type": "object"
         },
@@ -627,6 +641,20 @@ const docTemplate = `{
                 }
             }
         },
+        "models.ArticleSwagger": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Article"
+                    }
+                },
+                "pager": {
+                    "$ref": "#/definitions/app.Pager"
+                }
+            }
+        },
         "models.Tag": {
             "type": "object",
             "properties": {
@@ -656,6 +684,20 @@ const docTemplate = `{
                 },
                 "state": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.TagSwagger": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Tag"
+                    }
+                },
+                "pager": {
+                    "$ref": "#/definitions/app.Pager"
                 }
             }
         }

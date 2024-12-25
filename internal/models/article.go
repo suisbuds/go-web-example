@@ -1,5 +1,7 @@
 package models
 
+import "github.com/suisbuds/miao/pkg/app"
+
 type Article struct {
     *Model
     Title         string `json:"title"`
@@ -11,4 +13,9 @@ type Article struct {
 
 func (a Article) TableName() string {
 	return "miao_article"
+}
+
+type ArticleSwagger struct {
+	List  []*Article
+	Pager *app.Pager
 }
