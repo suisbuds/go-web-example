@@ -51,7 +51,7 @@ func main() {
 	}
 
 	global.Logger.Logf(logger.DEBUG, logger.SINGLE, "%s: miao_blog/%s", "suisbuds", "miao")
-	global.Zapper.Debugf("%s: miao_blog/%s", "suisbuds", "miao")
+	global.Zapper.Errorf("%s: miao_blog/%s", "suisbuds", "miao")
 	s.ListenAndServe()
 }
 

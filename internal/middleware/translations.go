@@ -13,6 +13,7 @@ import (
 	ja_translations "github.com/go-playground/validator/v10/translations/ja"
 )
 
+// 注册验证器注册，支持错误提示多语言
 func Translations() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uni := ut.New(en.New(), zh.New(), ja.New())
@@ -30,7 +31,7 @@ func Translations() gin.HandlerFunc {
 			case "ja":
 				_ = ja_translations.RegisterDefaultTranslations(v,trans)
 			default:
-				_ = en_translations.RegisterDefaultTranslations(v, trans)
+				_ = ja_translations.RegisterDefaultTranslations(v, trans)
 				break
 			}
 			c.Set("trans", trans)

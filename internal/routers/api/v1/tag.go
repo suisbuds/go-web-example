@@ -2,6 +2,10 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/suisbuds/miao/global"
+	"github.com/suisbuds/miao/pkg/app"
+	"github.com/suisbuds/miao/pkg/errcode"
+	"github.com/suisbuds/miao/pkg/logger"
 )
 
 type Tag struct {}
@@ -33,7 +37,26 @@ func (t Tag) Get(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags [get]
-func (t Tag) List(c *gin.Context) {}
+func (t Tag) List(c *gin.Context) {
+	// 测试接口参数校验
+	param := struct {
+		Name  string `form:"name" binding:"max=100"`
+		State uint8  `form:"state,default=1" binding:"oneof=0 1"`
+	}{}
+	response := app.NewResponse(c) // 响应接口返回的结果
+	valid, errs := app.BindAndValid(c, &param) // 参数校验
+	if !valid {
+		// 自定义的日志处理器
+		global.Logger.Logf(logger.ERROR,logger.SINGLE, "app.BindAndValid errs: %v", errs)
+		// 错误响应
+		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...)) 
+		return
+	}
+
+	//  TagListRequest 校验规则 required false，无 state 参数情况下默认无校验，也可以请求成功
+	response.ToResponse(gin.H{})
+	return
+}
 
 // @Summary 新增标签
 // @Produce  json
