@@ -4,9 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/suisbuds/miao/docs"
 	"github.com/suisbuds/miao/internal/middleware"
-	v1 "github.com/suisbuds/miao/internal/routers/api/v1"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/suisbuds/miao/internal/routers/api/v1"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
 
 func NewRouter() *gin.Engine {
@@ -16,9 +16,10 @@ func NewRouter() *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.Use(middleware.Translations())
+	// 生成 swagger 文档
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// 编写路由 Handlers，注册到路由对应的规程
+	// 将路由 Handlers 注册到对应的路由组
 	article := v1.NewArticle()
 	tag := v1.NewTag()
 

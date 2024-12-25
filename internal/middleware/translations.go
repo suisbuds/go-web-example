@@ -7,8 +7,8 @@ import (
 	"github.com/go-playground/locales/ja"
 	"github.com/go-playground/locales/zh"
 	"github.com/go-playground/universal-translator"
-	validator "github.com/go-playground/validator/v10"
-	en_translations "github.com/go-playground/validator/v10/translations/en"
+	"github.com/go-playground/validator/v10"
+	en_translations"github.com/go-playground/validator/v10/translations/en"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
 	ja_translations "github.com/go-playground/validator/v10/translations/ja"
 )
@@ -16,9 +16,9 @@ import (
 // 注册验证器注册，支持错误提示多语言
 func Translations() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		uni := ut.New(en.New(), zh.New(), ja.New())
+		uniTrans := ut.New(en.New(), zh.New(), ja.New())
 		locale := c.GetHeader("locale")
-		trans, _ := uni.GetTranslator(locale)
+		trans, _ := uniTrans.GetTranslator(locale)
 		v, ok := binding.Validator.Engine().(*validator.Validate)
 		if ok {
 			switch locale {

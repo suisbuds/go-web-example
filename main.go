@@ -2,11 +2,13 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/suisbuds/miao/global"
 	"github.com/suisbuds/miao/internal/models"
 	"github.com/suisbuds/miao/internal/routers"
 	"github.com/suisbuds/miao/pkg/logger"
 	"github.com/suisbuds/miao/pkg/setting"
+	"github.com/suisbuds/miao/pkg/validator"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -33,6 +35,10 @@ func init() {
 	if err != nil {
 		log.Fatalf("init.setupZap err: %v", err)
 	}
+	err = setupValidator()
+	if err != nil {
+		log.Fatalf("init.setupValidator err: %v", err)
+	}
 }
 
 // @title miao
@@ -50,8 +56,10 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
+	// 测试日志
 	global.Logger.Logf(logger.DEBUG, logger.SINGLE, "%s: miao_blog/%s", "suisbuds", "miao")
 	global.Zapper.Errorf("%s: miao_blog/%s", "suisbuds", "miao")
+	
 	s.ListenAndServe()
 }
 
@@ -134,3 +142,9 @@ func setupDBEngine() error {
 	return nil
 }
 
+func setupValidator() error {
+	global.Validator = validator.NewMiaoValidator()
+	global.Validator.Engine()
+	binding.Validator = global.Validator // 实现 bind.Validation 接口，替换成 MiaoValidator
+	return nil
+}

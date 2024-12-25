@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 接口校验
+// 接口参数校验
 
 type ValidError struct {
 	Key     string
