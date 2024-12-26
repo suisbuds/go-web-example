@@ -26,7 +26,8 @@ type TagSwagger struct {
 
 // 统计符合条件的 Tag 数量
 func (t Tag) Count(db *gorm.DB) (int, error) {
-	var count int
+	// Count 参数传入 int64, 但是 app.go 的参数 TotalRows 是 int 
+	var count int64
 	if t.Name != "" {
 		db = db.Where("name = ?", t.Name)
 	}
@@ -35,7 +36,7 @@ func (t Tag) Count(db *gorm.DB) (int, error) {
 		return 0, err
 	}
 
-	return count, nil
+	return int(count), nil
 }
 
 // 获取 Tag 列表

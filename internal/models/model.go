@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-// 共用模型
+// 公共模型，处理公共字段
 type Model struct {
 	ID         uint32 `gorm:"primary_key" json:"id"`
 	CreatedBy  string `json:"created_by"`

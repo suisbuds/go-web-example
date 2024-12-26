@@ -14,8 +14,11 @@ type Response struct {
 }
 
 type Pager struct {
+	// 页码
 	Page int `json:"page"`
+	// 每页数量
 	PageSize int `json:"page_size"`
+	// 总行数
 	TotalRows int `json:"total_rows"`
 }
 
