@@ -8,9 +8,11 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 // 公共模型，处理公共字段
+// 公共字段可以设置为 CreatedAt, ModifiedAt, DeletedAt, Gorm 可以自动更新
 type Model struct {
 	ID         uint32 `gorm:"primary_key" json:"id"`
 	CreatedBy  string `json:"created_by"`
@@ -32,28 +34,34 @@ func NewDBEngine(databaseSetting *setting.DatabaseSetting) (*gorm.DB, error) {
 		databaseSetting.SSLMode,
 		databaseSetting.TimeZone)
 
-	var logMode logger.Interface
+	// 使用 gorm 默认 logger
+	var newLogger logger.Interface
 	if global.ServerSetting.RunMode == "debug" {
-		logMode = logger.Default.LogMode(logger.Info)
+		newLogger = logger.Default.LogMode(logger.Info)
 	} else {
-		logMode = logger.Default.LogMode(logger.Silent)
+		newLogger = logger.Default.LogMode(logger.Silent)
 	}
 
-	// gorm 打开 pg
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: logMode})
+	// gorm 连接 pg
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: newLogger,
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	// 获取底层 sql.DB 对象，设置连接池参数
+	// 获取 DB 对象
 	sqlDB, err := db.DB()
 	if err != nil {
 		return nil, err
 	}
 
+	// 设置连接池参数
 	sqlDB.SetMaxIdleConns(databaseSetting.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(databaseSetting.MaxOpenConns)
 
 	return db, nil
-
 }
