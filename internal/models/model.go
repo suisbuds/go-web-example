@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/suisbuds/miao/global"
 	"github.com/suisbuds/miao/pkg/setting"
@@ -11,16 +12,15 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-// 公共模型，处理公共字段
 // 公共字段可以设置为 CreatedAt, ModifiedAt, DeletedAt, Gorm 可以自动更新
 type Model struct {
-	ID         uint32 `gorm:"primary_key" json:"id"`
-	CreatedBy  string `json:"created_by"`
-	ModifiedBy string `json:"modified_by"`
-	CreatedOn  uint32 `json:"created_on"`
-	ModifiedOn uint32 `json:"modified_on"`
-	DeletedOn  uint32 `json:"deleted_on"`
-	IsDel      uint8  `json:"is_del"`
+	ID         uint32         `gorm:"primary_key" json:"id"`
+	CreatedBy  string         `json:"created_by"`
+	ModifiedBy string         `json:"modified_by"`
+	CreatedAt  time.Time      `json:"created_at"`
+	UpdatedAt  time.Time      `json:"updated_at"`
+	DeletedAt  gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	IsDel      uint8          `json:"is_del"`
 }
 
 func NewDBEngine(databaseSetting *setting.DatabaseSetting) (*gorm.DB, error) {
@@ -63,5 +63,29 @@ func NewDBEngine(databaseSetting *setting.DatabaseSetting) (*gorm.DB, error) {
 	sqlDB.SetMaxIdleConns(databaseSetting.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(databaseSetting.MaxOpenConns)
 
+
 	return db, nil
+}
+
+
+// Hooks
+func (m *Model) BeforeCreate(db *gorm.DB) (err error) {
+	// 创建记录前设置时间戳
+	m.CreatedAt = time.Now()
+	m.UpdatedAt = time.Now()
+	return
+}
+
+func (m *Model) BeforeUpdate(db *gorm.DB) (err error) {
+	// 更新记录前更新时间戳
+	m.UpdatedAt = time.Now()
+	return
+}
+
+func (m *Model) BeforeDelete(db *gorm.DB) (err error) {
+	// 删除记录前进行软删除
+	m.DeletedAt.Time = time.Now()
+	m.DeletedAt.Valid = true
+	m.IsDel = 1
+	return
 }
