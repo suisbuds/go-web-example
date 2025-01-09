@@ -12,7 +12,10 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-// 公共字段可以设置为 CreatedAt, ModifiedAt, DeletedAt, Gorm 可以自动更新
+// Model 层定义数据结构, 实现 ORM 映射, 定义字段验证规则和约束, 与数据库中的表一一对应
+
+// 公共字段设置为 CreatedAt, ModifiedAt, DeletedAt 时 Gorm 可以自动更新
+// IsDel 软删除标记, ID 主键, State 状态标记, 表示是否启用资源
 type Model struct {
 	ID         uint32         `gorm:"primary_key" json:"id"`
 	CreatedBy  string         `json:"created_by"`
@@ -68,24 +71,24 @@ func NewDBEngine(databaseSetting *setting.DatabaseSetting) (*gorm.DB, error) {
 }
 
 
-// Hooks
-func (m *Model) BeforeCreate(db *gorm.DB) (err error) {
-	// 创建记录前设置时间戳
-	m.CreatedAt = time.Now()
-	m.UpdatedAt = time.Now()
-	return
-}
+// Hooks: CreatedAt, UpdatedAt, DeletedAt (Grom 内部的软删除) 会自动更新, IsDel 自定义不能自动更新
+// func (m *Model) BeforeCreate(db *gorm.DB) (err error) {
+// 	// 创建记录前设置时间戳
+// 	m.CreatedAt = time.Now()
+// 	m.UpdatedAt = time.Now()
+// 	return
+// }
 
-func (m *Model) BeforeUpdate(db *gorm.DB) (err error) {
-	// 更新记录前更新时间戳
-	m.UpdatedAt = time.Now()
-	return
-}
+// func (m *Model) BeforeUpdate(db *gorm.DB) (err error) {
+// 	// 更新记录前更新时间戳
+// 	m.UpdatedAt = time.Now()
+// 	return
+// }
 
-func (m *Model) BeforeDelete(db *gorm.DB) (err error) {
-	// 删除记录前进行软删除
-	m.DeletedAt.Time = time.Now()
-	m.DeletedAt.Valid = true
-	m.IsDel = 1
-	return
-}
+// func (m *Model) BeforeDelete(db *gorm.DB) (err error) {
+// 	// 删除记录前进行软删除
+// 	m.DeletedAt.Time = time.Now()
+// 	m.DeletedAt.Valid = true
+// 	m.IsDel = 1
+// 	return
+// }

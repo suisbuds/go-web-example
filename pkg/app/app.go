@@ -7,7 +7,7 @@ import (
 	"github.com/suisbuds/miao/pkg/errcode"
 )
 
-// 接口返回的响应处理：对接口返回的 HTTP 状态码和响应结果进行判断
+// 接口返回响应处理: 对接口返回的 HTTP 状态码和响应结果进行判断
 
 type Response struct {
 	Ctx *gin.Context

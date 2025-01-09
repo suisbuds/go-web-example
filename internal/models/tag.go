@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// 封装 Tag 模块对应的数据操作
+// 封装 Tag 模块对应的数据操作, 与 Dao 层交互, 借助 Gorm 操作数据库
 
 type Tag struct {
 	*Model
@@ -90,5 +90,8 @@ func (t Tag) Update(db *gorm.DB, values interface{}) error {
 }
 
 func (t Tag) Delete(db *gorm.DB) error {
-	return db.Where("id = ? AND is_del = ?", t.Model.ID, 0).Delete(&t).Error
+	if err := db.Model(&t).Where("id = ? AND is_del = ?", t.Model.ID, 0).Update("is_del", 1).Error; err != nil {
+        return err
+    }
+	return db.Where("id = ?", t.Model.ID).Delete(&t).Error
 }

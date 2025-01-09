@@ -9,6 +9,8 @@ import (
 	"github.com/swaggo/gin-swagger"
 )
 
+// Router 层负责路由注册, 处理 HTTP 请求, 进行参数验证和处理
+
 func NewRouter() *gin.Engine {
 	r := gin.New()
 
@@ -25,15 +27,17 @@ func NewRouter() *gin.Engine {
 
 	// 测试接口
 	apiv1 := r.Group("/api/v1")
-	{
-		
-		// apiv1.GET("/tags", tag.Get) // Handlers 不能重复注册
+	{ 
+	
+		// 测试 Tag 接口
+		// Handlers 不能重复注册: apiv1.GET("/tags", tag.Get)
 		apiv1.GET("/tags", tag.List)
 		apiv1.POST("/tags", tag.Create)
 		apiv1.PUT("/tags/:id", tag.Update)
 		apiv1.PATCH("/tags/:id/state", tag.Update)
 		apiv1.DELETE("/tags/:id", tag.Delete)
   
+		// 测试 Article 接口
 		apiv1.GET("/articles/:id", article.Get)
 		apiv1.GET("/articles", article.List)
 		apiv1.POST("/articles", article.Create)

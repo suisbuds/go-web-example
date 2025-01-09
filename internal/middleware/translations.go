@@ -31,7 +31,7 @@ func Translations() gin.HandlerFunc {
 			case "ja":
 				_ = ja_translations.RegisterDefaultTranslations(v,trans)
 			default:
-				_ = ja_translations.RegisterDefaultTranslations(v, trans)
+				_ = zh_translations.RegisterDefaultTranslations(v, trans)
 				break
 			}
 			c.Set("trans", trans)
