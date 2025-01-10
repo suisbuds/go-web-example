@@ -25,7 +25,7 @@ func NewRouter() *gin.Engine {
 	article := v1.NewArticle()
 	tag := v1.NewTag()
 
-	// 测试接口
+	// 路由接口定义
 	apiv1 := r.Group("/api/v1")
 	{ 
 	
@@ -38,6 +38,7 @@ func NewRouter() *gin.Engine {
 		apiv1.DELETE("/tags/:id", tag.Delete)
   
 		// 测试 Article 接口
+		// 验证 Article 接口时必须确保 TagID 和 ArticleID 的对应, 并且根据接口文档调用 (定义好接口后生成接口文档)
 		apiv1.GET("/articles/:id", article.Get)
 		apiv1.GET("/articles", article.List)
 		apiv1.POST("/articles", article.Create)

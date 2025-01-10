@@ -12,6 +12,12 @@ import (
 	"gorm.io/gorm/schema"
 )
 
+// 资源启用标志
+const (
+	STATE_OPEN  = 1
+	STATE_CLOSE = 0
+)
+
 // Model 层定义数据结构, 实现 ORM 映射, 定义字段验证规则和约束, 与数据库中的表一一对应
 
 // 公共字段设置为 CreatedAt, ModifiedAt, DeletedAt 时 Gorm 可以自动更新

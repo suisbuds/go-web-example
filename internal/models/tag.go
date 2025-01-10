@@ -6,6 +6,7 @@ import (
 )
 
 // 封装 Tag 模块对应的数据操作, 与 Dao 层交互, 借助 Gorm 操作数据库
+// 显式错误处理, 让代码更具可读性
 
 type Tag struct {
 	*Model
@@ -24,9 +25,45 @@ type TagSwagger struct {
 	Pager *app.Pager
 }
 
+
+func (t Tag) Create(db *gorm.DB) error {
+	if err := db.Create(&t).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// 根据 ID 获取 Tag
+func (t Tag) Get(db *gorm.DB) (Tag, error) {
+	var tag Tag
+	err := db.Where("id = ? AND is_del = ? AND state = ?", t.ID, 0, t.State).First(&tag).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return tag, err
+	}
+
+	return tag, nil
+}
+
+func (t Tag) Update(db *gorm.DB, values interface{}) error {
+	if err := db.Model(&t).Where("id = ? AND is_del = ?", t.ID, 0).Updates(values).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t Tag) Delete(db *gorm.DB) error {
+	if err := db.Model(&t).Where("id = ? AND is_del = ?", t.Model.ID, 0).Update("is_del", 1).Error; err != nil {
+		return err
+	}
+	if err := db.Where("id = ?", t.Model.ID).Delete(&t).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 // 统计符合条件的 Tag 数量
 func (t Tag) Count(db *gorm.DB) (int, error) {
-	// Count 参数传入 int64, 但是 app.go 的参数 TotalRows 是 int 
+	// Count 参数传入 int64, 但是 app.go 的参数 TotalRows 是 int, 需要显式类型转换
 	var count int64
 	if t.Name != "" {
 		db = db.Where("name = ?", t.Name)
@@ -68,30 +105,4 @@ func (t Tag) ListByIDs(db *gorm.DB, ids []uint32) ([]*Tag, error) {
 	}
 
 	return tags, nil
-}
-
-// 根据 ID 获取 Tag
-func (t Tag) Get(db *gorm.DB) (Tag, error) {
-	var tag Tag
-	err := db.Where("id = ? AND is_del = ? AND state = ?", t.ID, 0, t.State).First(&tag).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return tag, err
-	}
-
-	return tag, nil
-}
-
-func (t Tag) Create(db *gorm.DB) error {
-	return db.Create(&t).Error
-}
-
-func (t Tag) Update(db *gorm.DB, values interface{}) error {
-	return db.Model(&t).Where("id = ? AND is_del = ?", t.ID, 0).Updates(values).Error
-}
-
-func (t Tag) Delete(db *gorm.DB) error {
-	if err := db.Model(&t).Where("id = ? AND is_del = ?", t.Model.ID, 0).Update("is_del", 1).Error; err != nil {
-        return err
-    }
-	return db.Where("id = ?", t.Model.ID).Delete(&t).Error
 }
