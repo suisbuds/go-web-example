@@ -11,6 +11,13 @@ App:
   LoggerFileName: app_logger
   ZapperFileName: app_zapper
   LogFileExt: .log  # 扩展名
+  UploadSavePath: storage/uploads
+  UploadServerUrl: http://127.0.0.1:8000/static
+  UploadImageMaxSize: 5  # MB
+  UploadImageAllowExts:
+    - .jpg
+    - .jpeg
+    - .png
 
 Database:
   DBType: postgres

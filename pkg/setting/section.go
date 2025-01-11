@@ -1,6 +1,6 @@
 package setting
 
-// 读取 config.yaml
+// 利用 Viper 读取配置 config.yaml
 
 import (
 	"time"
@@ -14,12 +14,16 @@ type ServerSetting struct {
 }
 
 type AppSetting struct {
-	DefaultPageSize int
-	MaxPageSize     int
-	LogSavePath     string
-	LoggerFileName     string
-	ZapperFileName     string
-	LogFileExt      string
+	DefaultPageSize      int
+	MaxPageSize          int
+	LogSavePath          string
+	LoggerFileName       string
+	ZapperFileName       string
+	LogFileExt           string
+	UploadSavePath       string
+	UploadServerUrl      string
+	UploadImageMaxSize   int
+	UploadImageAllowExts []string
 }
 
 type DatabaseSetting struct {
