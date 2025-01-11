@@ -34,3 +34,6 @@ Thumbs.db
 # Go build output
 bin/
 build/
+
+
+/configs/config.yaml

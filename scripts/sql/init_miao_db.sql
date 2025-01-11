@@ -127,3 +127,28 @@ ALTER TABLE miao_article_tag
     ADD CONSTRAINT fk_tag
         FOREIGN KEY (tag_id) REFERENCES miao_tag(id)
         ON DELETE CASCADE;
+
+
+CREATE TABLE IF NOT EXISTS miao_auth (
+    id SERIAL PRIMARY KEY,
+    app_key VARCHAR(20) NOT NULL DEFAULT '',
+    app_secret VARCHAR(50) NOT NULL DEFAULT '',
+    created_by VARCHAR(100) NOT NULL DEFAULT '',
+    modified_by VARCHAR(100) NOT NULL DEFAULT '',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ,
+    is_del SMALLINT NOT NULL DEFAULT 0
+);
+
+COMMENT ON TABLE miao_auth IS '认证管理';
+
+COMMENT ON COLUMN miao_auth.id IS '主键 ID';
+COMMENT ON COLUMN miao_auth.app_key IS 'Key';
+COMMENT ON COLUMN miao_auth.app_secret IS 'Secret';
+COMMENT ON COLUMN miao_auth.created_by IS '创建人';
+COMMENT ON COLUMN miao_auth.modified_by IS '修改人';
+COMMENT ON COLUMN miao_auth.created_at IS '创建时间';
+COMMENT ON COLUMN miao_auth.updated_at IS '修改时间';
+COMMENT ON COLUMN miao_auth.deleted_at IS '删除时间';
+COMMENT ON COLUMN miao_auth.is_del IS '是否删除 0 为未删除、1 为已删除';

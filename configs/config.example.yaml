@@ -6,14 +6,14 @@ Server:
 
 App:
   DefaultPageSize: 10
-  MaxPageSize: 100  # 每页100条记录
+  MaxPageSize: 100  
   LogSavePath: storage/logs
   LoggerFileName: app_logger
   ZapperFileName: app_zapper
-  LogFileExt: .log  # 扩展名
+  LogFileExt: .log  
   UploadSavePath: storage/uploads
   UploadServerUrl: http://127.0.0.1:8000/static
-  UploadImageMaxSize: 5  # MB
+  UploadImageMaxSize: 5  
   UploadImageAllowExts:
     - .jpg
     - .jpeg
@@ -21,13 +21,18 @@ App:
 
 Database:
   DBType: postgres
-  Username: postgres  
-  Password:   
+  Username: 
+  Password:  
   Host: 127.0.0.1
   Port: 5432
   DBName: miao
   TablePrefix: miao_
   SSLmode: disable
   TimeZone: Asia/Shanghai
-  MaxIdleConns: 10  # 空闲连接数
-  MaxOpenConns: 30  # 打开连接数
+  MaxIdleConns: 10  
+  MaxOpenConns: 30 
+
+JWT:
+  Secret: 
+  Issuer: 
+  Expire: 7200

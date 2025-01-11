@@ -3,11 +3,14 @@ package setting
 import "github.com/spf13/viper"
 
 type Setting struct {
-	vp *viper.Viper
+	viper *viper.Viper
 }
 
 // Viper 读取配置文件 config.yaml
 func NewSetting() (*Setting, error) {
+
+	CheckEnv()
+
 	vp := viper.New()
 	vp.SetConfigName("config")
 	vp.AddConfigPath("configs/")

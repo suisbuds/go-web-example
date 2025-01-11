@@ -1,6 +1,7 @@
 package main
 
 import (
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/suisbuds/miao/global"
@@ -56,7 +57,7 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	// 测试日志
+	// 测试日志功能
 	global.Logger.Logf(logger.DEBUG, logger.SINGLE, "%s: miao_blog/%s", "suisbuds", "miao")
 	global.Zapper.Errorf("%s: miao_blog/%s", "suisbuds", "miao")
 	

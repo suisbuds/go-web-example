@@ -3,6 +3,7 @@ package setting
 // 利用 Viper 读取配置 config.yaml
 
 import (
+	"os"
 	"time"
 )
 
@@ -41,9 +42,20 @@ type DatabaseSetting struct {
 }
 
 func (s *Setting) ReadSection(k string, v interface{}) error {
-	err := s.vp.UnmarshalKey(k, v)
+
+	err := s.viper.UnmarshalKey(k, v)
 	if err != nil {
 		return err
 	}
+
+    // fmt.Printf("v's type: %T\n", v)
+
+
+	// 配置 doppler 环境变量. 空接口类型 interface{}, 可以持有任何值, 在运行时需要通过反射或类型断言转换为具体类型
+	if dbSetting, ok := v.(**DatabaseSetting); ok {
+		(*dbSetting).Password = os.Getenv("DB_PASSWORD") // 解引用二重指针
+		(*dbSetting).UserName = os.Getenv("USERNAME")
+	}
+
 	return nil
 }
