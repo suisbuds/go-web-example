@@ -41,6 +41,12 @@ type DatabaseSetting struct {
 	MaxOpenConns int
 }
 
+type JWTSettingS struct {
+	Secret string
+	Issuer string
+	Expire time.Duration
+}
+
 func (s *Setting) ReadSection(k string, v interface{}) error {
 
 	err := s.viper.UnmarshalKey(k, v)
@@ -48,13 +54,26 @@ func (s *Setting) ReadSection(k string, v interface{}) error {
 		return err
 	}
 
-    // fmt.Printf("v's type: %T\n", v)
-
+	// fmt.Printf("v's type: %T\n", v)
 
 	// 配置 doppler 环境变量. 空接口类型 interface{}, 可以持有任何值, 在运行时需要通过反射或类型断言转换为具体类型
+
 	if dbSetting, ok := v.(**DatabaseSetting); ok {
-		(*dbSetting).Password = os.Getenv("DB_PASSWORD") // 解引用二重指针
-		(*dbSetting).UserName = os.Getenv("USERNAME")
+		if (*dbSetting).Password == "" {
+			(*dbSetting).Password = os.Getenv("DB_PASSWORD") // 解引用二重指针
+		}
+		if (*dbSetting).UserName == "" {
+			(*dbSetting).UserName = os.Getenv("USERNAME")
+		}
+	}
+
+	if jwtSetting, ok := v.(**JWTSettingS); ok {
+		if (*jwtSetting).Secret == "" {
+			(*jwtSetting).Secret = os.Getenv("SECRET")
+		}
+		if (*jwtSetting).Issuer == "" {
+			(*jwtSetting).Issuer = os.Getenv("ISSUER")
+		}
 	}
 
 	return nil

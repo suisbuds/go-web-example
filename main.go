@@ -65,24 +65,31 @@ func main() {
 }
 
 func setupSetting() error {
-	setting, err := setting.NewSetting()
+	s, err := setting.NewSetting()
 	if err != nil {
 		return err
 	}
-	err = setting.ReadSection("Server", &global.ServerSetting)
+	err = s.ReadSection("Server", &global.ServerSetting)
 	if err != nil {
 		return err
 	}
-	err = setting.ReadSection("App", &global.AppSetting)
+	err = s.ReadSection("App", &global.AppSetting)
 	if err != nil {
 		return err
 	}
-	err = setting.ReadSection("Database", &global.DatabaseSetting)
+	err = s.ReadSection("Database", &global.DatabaseSetting)
 	if err != nil {
 		return err
 	}
+	err = s.ReadSection("JWT", &global.JWTSetting)
+	if err != nil {
+		return err
+	}
+
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
+	global.JWTSetting.Expire *= time.Second
+
 	return nil
 }
 
@@ -146,6 +153,6 @@ func setupDBEngine() error {
 func setupValidator() error {
 	global.Validator = validator.NewMiaoValidator()
 	global.Validator.Engine()
-	binding.Validator = global.Validator // 实现 bind.Validation 接口，替换成 MiaoValidator
+	binding.Validator = global.Validator // 实现 bind.Validation 接口, 替换成 MiaoValidator
 	return nil
 }
