@@ -34,10 +34,13 @@ func NewRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // 注册 GET 请求 swagger 文档路由
 	r.POST("/upload/file", upload.UploadFile) // 注册 POST 请求文件上传路由
 	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath)) // 设置静态文件服务: 将 /static 路径映射到服务器的 UploadSavePath 目录, 然后通过访问 /static URL 获取上传的静态文件
+	r.POST("/auth", api.GetAuth) // 注册 POST 请求认证路由
 
 
 	// 路由接口定义
 	apiv1 := r.Group("/api/v1")
+	// gin 分组路由: 只针对 apiv1 的路由组使用 JWT 中间件
+	apiv1.Use(middleware.JWT())
 	{ 
 	
 		// Handlers 不能重复注册: apiv1.GET("/tags", tag.Get)

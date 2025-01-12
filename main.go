@@ -61,7 +61,12 @@ func main() {
 	global.Logger.Logf(logger.DEBUG, logger.SINGLE, "%s: miao_blog/%s", "suisbuds", "miao")
 	global.Zapper.Errorf("%s: miao_blog/%s", "suisbuds", "miao")
 	
+	// token-payload base64解码. 不要在 Payload 中明文存储敏感信息, 或者进行不可逆加密
+	// JWT 过期时间存储在 payload 中, 一旦签发不可变更 
+	// base64.StdEncoding.DecodeString("xxx")
+
 	s.ListenAndServe()
+
 }
 
 func setupSetting() error {

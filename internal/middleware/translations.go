@@ -8,13 +8,13 @@ import (
 	"github.com/go-playground/locales/zh"
 	"github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
-	en_translations"github.com/go-playground/validator/v10/translations/en"
-	zh_translations "github.com/go-playground/validator/v10/translations/zh"
+	en_translations "github.com/go-playground/validator/v10/translations/en"
 	ja_translations "github.com/go-playground/validator/v10/translations/ja"
+	zh_translations "github.com/go-playground/validator/v10/translations/zh"
 )
 
-// 注册验证器注册，支持错误提示多语言
 func Translations() gin.HandlerFunc {
+	// 闭包: 注册验证器注册，支持错误提示多语言
 	return func(c *gin.Context) {
 		uniTrans := ut.New(en.New(), zh.New(), ja.New())
 		locale := c.GetHeader("locale")
@@ -29,7 +29,7 @@ func Translations() gin.HandlerFunc {
 				_ = en_translations.RegisterDefaultTranslations(v, trans)
 				break
 			case "ja":
-				_ = ja_translations.RegisterDefaultTranslations(v,trans)
+				_ = ja_translations.RegisterDefaultTranslations(v, trans)
 			default:
 				_ = zh_translations.RegisterDefaultTranslations(v, trans)
 				break
