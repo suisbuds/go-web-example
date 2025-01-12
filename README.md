@@ -1,6 +1,7 @@
 # Miao
 
-<img src="/assets/cat.jpeg" alt="Cat" width="300" height="300">
-
+<div align="center">
+    <img src="/assets/cat.jpeg" alt="Cat" width="300" height="420">
+</div>
 
 
