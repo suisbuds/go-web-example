@@ -43,6 +43,7 @@ func init() {
 	if err != nil {
 		log.Fatalf("init.setupValidator err: %v", err)
 	}
+
 }
 
 // @title miao
@@ -89,6 +90,10 @@ func setupSetting() error {
 		return err
 	}
 	err = s.ReadSection("JWT", &global.JWTSetting)
+	if err != nil {
+		return err
+	}
+	err = s.ReadSection("Email", &global.EmailSetting)
 	if err != nil {
 		return err
 	}

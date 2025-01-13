@@ -46,7 +46,7 @@ func SetEnv(v interface{}) {
 		}
 	}
 
-	if jwtSetting, ok := v.(**JWTSettingS); ok {
+	if jwtSetting, ok := v.(**JWTSetting); ok {
 		if (*jwtSetting).Secret == "${SECRET" {
 			(*jwtSetting).Secret = os.Getenv("SECRET")
 		}

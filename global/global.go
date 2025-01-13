@@ -8,23 +8,25 @@ import (
 	"gorm.io/gorm"
 )
 
-var(
-	
+var (
+
 	// Settings
 	ServerSetting   *setting.ServerSetting
 	AppSetting      *setting.AppSetting
 	DatabaseSetting *setting.DatabaseSetting
-	Logger 		*logger.Logger
-	Zapper *zap.SugaredLogger
-	Accesser *logger.Logger
+	Logger          *logger.Logger
+	Zapper          *zap.SugaredLogger
+	Accesser        *logger.Logger
 
 	// Database
 	DBEngine *gorm.DB
 
 	// JWT
-	JWTSetting    *setting.JWTSettingS
+	JWTSetting *setting.JWTSetting
+	
+	EmailSetting *setting.EmailSetting
 
 	// Validator
 	Validator *validator.MiaoValidator
-)
 
+)
