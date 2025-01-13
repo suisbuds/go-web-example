@@ -21,4 +21,9 @@ curl -X GET http://localhost:8080/api/v1/tags \
 // token 作为查询参数
 curl -X GET "http://localhost:8080/api/v1/tags?token=${token}"
 
+// 限流器测试
+for i in {1..11}; do
+  curl -X POST 'http://127.0.0.1:8000/auth?app_key=${app_key}&app_secret=${app_secret}'
+done
+
 ```

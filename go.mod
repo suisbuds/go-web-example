@@ -24,6 +24,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/jinzhu/gorm v1.9.16 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
+	github.com/juju/ratelimit v1.0.2 // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect

@@ -2,6 +2,7 @@ package routers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/suisbuds/miao/docs"
@@ -9,11 +10,23 @@ import (
 	"github.com/suisbuds/miao/internal/middleware"
 	"github.com/suisbuds/miao/internal/routers/api"
 	"github.com/suisbuds/miao/internal/routers/api/v1"
+	"github.com/suisbuds/miao/pkg/limiter"
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 )
 
 // Router 层负责注册路由, 调用 API 端点, 利用对应 Handlers 处理 HTTP 请求, 并进行参数校验
+
+// 路由限流
+var lim = limiter.NewMethodLimiter().AddBuckets(
+	// 令牌桶规则
+	limiter.LimiterBucketRule{
+		Key:          "/auth",     // 路由 URI
+		FillInterval: time.Second, // 每秒生成一个令牌
+		Capacity:     10,          // 容量
+		Quantum:      1,           // 每次填充一个令牌
+	},
+)
 
 func NewRouter() *gin.Engine {
 	r := gin.New()
@@ -26,9 +39,10 @@ func NewRouter() *gin.Engine {
 	} else {
 		r.Use(middleware.AccessLog())
 		r.Use(middleware.Recovery()) // 捕获 panic 并发送邮件预警
-	}	
+	}
+	r.Use(middleware.RateLimiter(lim)) // 限流器
 	r.Use(middleware.Translations()) // 翻译错误信息
-	r.Use(middleware.AppInfo())       // 获取应用信息
+	r.Use(middleware.AppInfo())      // 获取应用信息
 
 	// 注册 API 端点
 	article := v1.NewArticle()
@@ -45,8 +59,8 @@ func NewRouter() *gin.Engine {
 	apiv1 := r.Group("/api/v1")
 
 	//  分组路由中间件注册
-	if global.ServerSetting.RunMode != "debug" {
-		// 针对 apiv1 路由组使用 JWT 
+	if global.ServerSetting.RunMode == "debug" {
+		// 针对 apiv1 路由组使用 JWT
 		apiv1.Use(middleware.JWT())
 	}
 
