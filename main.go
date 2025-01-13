@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/suisbuds/miao/global"
@@ -28,13 +27,17 @@ func init() {
 	if err != nil {
 		log.Fatalf("init.setupLogger err: %v", err)
 	}
+	err = setupZapper()
+	if err != nil {
+		log.Fatalf("init.setupZap err: %v", err)
+	}
+	err = setupAccesser()
+	if err != nil {
+		log.Fatalf("init.setupAccesser err: %v", err)
+	}
 	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
-	}
-	err = setupZap()
-	if err != nil {
-		log.Fatalf("init.setupZap err: %v", err)
 	}
 	err = setupValidator()
 	if err != nil {
@@ -57,19 +60,18 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	// 测试日志功能
-	global.Logger.Logf(logger.DEBUG, logger.SINGLE, "%s: miao_blog/%s", "suisbuds", "miao")
-	global.Zapper.Errorf("%s: miao_blog/%s", "suisbuds", "miao")
-	
-	// token-payload base64解码. 不要在 Payload 中明文存储敏感信息, 或者进行不可逆加密
-	// JWT 过期时间存储在 payload 中, 一旦签发不可变更 
-	// base64.StdEncoding.DecodeString("xxx")
+	// 测试
+	// global.Logger.Logf(logger.DEBUG, logger.SINGLE, "%s: miao_blog/%s", "suisbuds", "miao")
+	// global.Zapper.Errorf("%s: miao_blog/%s", "suisbuds", "miao")
+	// base64.StdEncoding.DecodeString("xxx") // token-payload base64解码. 不要在 Payload 中明文存储敏感信息, 否则进行不可逆加密. JWT 过期时间存储在 payload 中, 一旦签发不可变更
 
 	s.ListenAndServe()
 
 }
 
 func setupSetting() error {
+
+	// Viper 读取配置
 	s, err := setting.NewSetting()
 	if err != nil {
 		return err
@@ -99,7 +101,8 @@ func setupSetting() error {
 }
 
 func setupLogger() error {
-	// Viper 读取配置
+
+	// Viper 读取日志配置
 	global.Logger = logger.NewLogger(
 		&lumberjack.Logger{
 			Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LoggerFileName + global.AppSetting.LogFileExt,
@@ -115,8 +118,9 @@ func setupLogger() error {
 	return nil
 }
 
-func setupZap() error {
-	// zap 日志写入，lumberjack 管理日志滚动
+func setupZapper() error {
+
+	// zap 日志写入, lumberjack 管理日志滚动
 	writeSyncer := zapcore.AddSync(&lumberjack.Logger{
 		Filename: global.AppSetting.LogSavePath + "/" + global.AppSetting.ZapperFileName + global.AppSetting.LogFileExt,
 		MaxSize:  600,
@@ -140,6 +144,23 @@ func setupZap() error {
 
 	// 转换为 SugaredLogger 并赋值给 Zapper
 	global.Zapper = logger.Sugar()
+	return nil
+}
+
+func setupAccesser() error {
+
+	global.Accesser = logger.NewLogger(
+		&lumberjack.Logger{
+			Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.AccesserFileName + global.AppSetting.LogFileExt,
+			MaxSize:   600,
+			MaxAge:    10,   // 文件存在最大天数
+			LocalTime: true, // 本地时间
+			Compress:  true, // 压缩
+		},
+		"",
+		log.LstdFlags,
+	)
+
 	return nil
 }
 

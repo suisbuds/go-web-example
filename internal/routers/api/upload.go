@@ -9,7 +9,6 @@ import (
 	"github.com/suisbuds/miao/pkg/errcode"
 	"github.com/suisbuds/miao/pkg/logger"
 	"github.com/suisbuds/miao/pkg/upload"
-	"go.uber.org/zap/zapcore"
 )
 
 // 处理文件上传的 API 端点
@@ -45,7 +44,6 @@ func (u Upload) UploadFile(c *gin.Context) {
 	fileInfo, err := svc.UploadFile(upload.FileType(fileType), file, fileHeader)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "svc.UploadFile err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "svc.UploadFile err: %v", err)
 		response.ToErrorResponse(errcode.ErrorUploadFileFail.WithDetails(err.Error()))
 		return
 	}

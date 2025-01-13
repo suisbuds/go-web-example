@@ -16,6 +16,7 @@ var(
 	DatabaseSetting *setting.DatabaseSetting
 	Logger 		*logger.Logger
 	Zapper *zap.SugaredLogger
+	Accesser *logger.Logger
 
 	// Database
 	DBEngine *gorm.DB

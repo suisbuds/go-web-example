@@ -8,7 +8,6 @@ import (
 	"github.com/suisbuds/miao/pkg/convert"
 	"github.com/suisbuds/miao/pkg/errcode"
 	"github.com/suisbuds/miao/pkg/logger"
-	"go.uber.org/zap/zapcore"
 )
 
 // 路由接口处理
@@ -18,7 +17,6 @@ type Article struct{}
 func NewArticle() Article {
 	return Article{}
 }
-
 
 // @Summary 创建文章
 // @Produce json
@@ -39,7 +37,6 @@ func (a Article) Create(c *gin.Context) {
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "app.BindAndValid errs: %v", errs)
-		global.Zapper.Logf(zapcore.ErrorLevel, "app.BindAndValid errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
 		return
 	}
@@ -48,7 +45,6 @@ func (a Article) Create(c *gin.Context) {
 	err := svc.CreateArticle(&param)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "svc.CreateArticle err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "svc.CreateArticle err: %v", err)
 		response.ToErrorResponse(errcode.ErrorCreateArticleFail)
 		return
 	}
@@ -70,7 +66,6 @@ func (a Article) Get(c *gin.Context) {
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "app.BindAndValid errs: %v", errs)
-		global.Zapper.Logf(zapcore.ErrorLevel, "app.BindAndValid errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
 		return
 	}
@@ -79,7 +74,6 @@ func (a Article) Get(c *gin.Context) {
 	article, err := svc.GetArticle(&param)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "svc.GetArticle err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "svc.GetArticle err: %v", err)
 		response.ToErrorResponse(errcode.ErrorGetArticleFail)
 		return
 	}
@@ -87,7 +81,6 @@ func (a Article) Get(c *gin.Context) {
 	response.ToResponse(article)
 	return
 }
-
 
 // @Summary 获取多个文章
 // @Produce json
@@ -106,7 +99,6 @@ func (a Article) List(c *gin.Context) {
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "app.BindAndValid errs: %v", errs)
-		global.Zapper.Logf(zapcore.ErrorLevel, "app.BindAndValid errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
 		return
 	}
@@ -116,7 +108,6 @@ func (a Article) List(c *gin.Context) {
 	articles, totalRows, err := svc.GetArticleList(&param, &pager)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "svc.GetArticleList err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "svc.GetArticleList err: %v", err)
 		response.ToErrorResponse(errcode.ErrorGetArticlesFail)
 		return
 	}
@@ -143,7 +134,6 @@ func (a Article) Update(c *gin.Context) {
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "app.BindAndValid errs: %v", errs)
-		global.Zapper.Logf(zapcore.ErrorLevel, "app.BindAndValid errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
 		return
 	}
@@ -152,7 +142,6 @@ func (a Article) Update(c *gin.Context) {
 	err := svc.UpdateArticle(&param)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "svc.UpdateArticle err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "svc.UpdateArticle err: %v", err)
 		response.ToErrorResponse(errcode.ErrorUpdateArticleFail)
 		return
 	}
@@ -174,7 +163,6 @@ func (a Article) Delete(c *gin.Context) {
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "app.BindAndValid errs: %v", errs)
-		global.Zapper.Logf(zapcore.ErrorLevel, "app.BindAndValid errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
 		return
 	}
@@ -183,7 +171,6 @@ func (a Article) Delete(c *gin.Context) {
 	err := svc.DeleteArticle(&param)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "svc.DeleteArticle err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "svc.DeleteArticle err: %v", err)
 		response.ToErrorResponse(errcode.ErrorDeleteArticleFail)
 		return
 	}

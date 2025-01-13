@@ -8,7 +8,6 @@ import (
 	"github.com/suisbuds/miao/pkg/convert"
 	"github.com/suisbuds/miao/pkg/errcode"
 	"github.com/suisbuds/miao/pkg/logger"
-	"go.uber.org/zap/zapcore"
 )
 
 // URL -> Router -> Handler, 版本化管理接口 API 确保向后兼容, 与 Service 层交互, 调用 Service 层具体的业务操作
@@ -54,7 +53,6 @@ func (t Tag) List(c *gin.Context) {
 		// 自定义的日志处理器
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "app.BindAndValid errs: %v", errs)
 		// Zapper 日志处理器
-		global.Zapper.Logf(zapcore.ErrorLevel, "app.BindAndValid errs: %v", errs)
 		// 错误响应
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
 		return
@@ -67,14 +65,12 @@ func (t Tag) List(c *gin.Context) {
 	totalRows, err := svc.CountTag(&service.CountTagRequest{Name: param.Name, State: param.State})
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "service.CountTag err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "service.CountTag err: %v", err)
 		response.ToErrorResponse(errcode.ErrorCountTagFail)
 		return
 	}
 	tags, err := svc.GetTagList(&param, &pager)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "service.GetTagList err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "service.GetTagList err: %v", err)
 		response.ToErrorResponse(errcode.ErrorGetTagListFail)
 		return
 	}
@@ -98,7 +94,6 @@ func (t Tag) Create(c *gin.Context) {
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "app.BindAndValid errs: %v", errs)
-		global.Zapper.Logf(zapcore.ErrorLevel, "app.BindAndValid errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
 		return
 	}
@@ -107,7 +102,6 @@ func (t Tag) Create(c *gin.Context) {
 	err := svc.CreateTag(&param)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "svc.CreateTag err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "svc.CreateTag err: %v", err)
 		response.ToErrorResponse(errcode.ErrorCreateTagFail)
 		return
 	}
@@ -134,7 +128,6 @@ func (t Tag) Update(c *gin.Context) {
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "app.BindAndValid errs: %v", errs)
-		global.Zapper.Logf(zapcore.ErrorLevel, "app.BindAndValid errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
 		return
 	}
@@ -143,7 +136,6 @@ func (t Tag) Update(c *gin.Context) {
 	err := svc.UpdateTag(&param)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "svc.UpdateTag err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "svc.UpdateTag err: %v", err)
 		response.ToErrorResponse(errcode.ErrorUpdateTagFail)
 		return
 	}
@@ -165,7 +157,6 @@ func (t Tag) Delete(c *gin.Context) {
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE,"app.BindAndValid errs: %v", errs)
-		global.Zapper.Logf(zapcore.ErrorLevel, "app.BindAndValid errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
 		return
 	}
@@ -174,7 +165,6 @@ func (t Tag) Delete(c *gin.Context) {
 	err := svc.DeleteTag(&param)
 	if err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE,"svc.DeleteTag err: %v", err)
-		global.Zapper.Logf(zapcore.ErrorLevel, "svc.DeleteTag err: %v", err)
 		response.ToErrorResponse(errcode.ErrorDeleteTagFail)
 		return
 	}

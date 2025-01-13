@@ -3,7 +3,6 @@ package setting
 // 利用 Viper 读取配置 config.yaml
 
 import (
-	"os"
 	"time"
 )
 
@@ -20,6 +19,7 @@ type AppSetting struct {
 	LogSavePath          string
 	LoggerFileName       string
 	ZapperFileName       string
+	AccesserFileName     string
 	LogFileExt           string
 	UploadSavePath       string
 	UploadServerUrl      string
@@ -54,30 +54,9 @@ func (s *Setting) ReadSection(k string, v interface{}) error {
 		return err
 	}
 
-	// fmt.Printf("v's type: %T\n", v)
-
 	// 配置 doppler 环境变量. 空接口类型 interface{}, 可以持有任何值, 在运行时需要通过反射或类型断言转换为具体类型
 
-	if dbSetting, ok := v.(**DatabaseSetting); ok {
-		if (*dbSetting).Password == "${DB_PASSWORD}" {
-			(*dbSetting).Password = os.Getenv("DB_PASSWORD") // 解引用二重指针
-		}
-		if (*dbSetting).UserName == "${USERNAME}" {
-			(*dbSetting).UserName = os.Getenv("USERNAME")
-		}
-		if (*dbSetting).Port == "${PORT}" {
-			(*dbSetting).Port = os.Getenv("PORT")
-		}
-	}
-
-	if jwtSetting, ok := v.(**JWTSettingS); ok {
-		if (*jwtSetting).Secret == "${SECRET" {
-			(*jwtSetting).Secret = os.Getenv("SECRET")
-		}
-		if (*jwtSetting).Issuer == "${ISSUER}" {
-			(*jwtSetting).Issuer = os.Getenv("ISSUER")
-		}
-	}
+	SetEnv(v)
 
 	return nil
 }
