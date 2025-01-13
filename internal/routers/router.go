@@ -27,7 +27,8 @@ func NewRouter() *gin.Engine {
 		r.Use(middleware.AccessLog())
 		r.Use(middleware.Recovery()) // 捕获 panic 并发送邮件预警
 	}	
-	r.Use(middleware.Translations()) // 错误信息翻译
+	r.Use(middleware.Translations()) // 翻译错误信息
+	r.Use(middleware.AppInfo())       // 获取应用信息
 
 	// 注册 API 端点
 	article := v1.NewArticle()
