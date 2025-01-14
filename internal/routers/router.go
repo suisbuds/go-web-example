@@ -9,16 +9,16 @@ import (
 	"github.com/suisbuds/miao/global"
 	"github.com/suisbuds/miao/internal/middleware"
 	"github.com/suisbuds/miao/internal/routers/api"
-	"github.com/suisbuds/miao/internal/routers/api/v1"
+	v1 "github.com/suisbuds/miao/internal/routers/api/v1"
 	"github.com/suisbuds/miao/pkg/limiter"
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // Router 层负责注册路由, 调用 API 端点, 利用对应 Handlers 处理 HTTP 请求, 并进行参数校验
 
-// 路由限流
-var lim = limiter.NewMethodLimiter().AddBuckets(
+// 针对 auth 路由接口限流
+var authLimiter = limiter.NewRouteLimiter().AddBuckets(
 	// 令牌桶规则
 	limiter.LimiterBucketRule{
 		Key:          "/auth",     // 路由 URI
@@ -40,9 +40,9 @@ func NewRouter() *gin.Engine {
 		r.Use(middleware.AccessLog())
 		r.Use(middleware.Recovery()) // 捕获 panic 并发送邮件预警
 	}
-	r.Use(middleware.RateLimiter(lim)) // 限流器
-	r.Use(middleware.Translations()) // 翻译错误信息
-	r.Use(middleware.AppInfo())      // 获取应用信息
+	r.Use(middleware.RateLimiter(authLimiter)) // 限流器
+	r.Use(middleware.Translations())          // 翻译错误信息
+	r.Use(middleware.AppInfo())               // 获取应用信息
 
 	// 注册 API 端点
 	article := v1.NewArticle()
