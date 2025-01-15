@@ -5,11 +5,11 @@ import (
 	"net/http"
 )
 
-// 封装调用函数, 不允许外部直接调用
+// 公有字段绑定 json 标签以序列化, 但是 json 包无法访问私有字段
 type Error struct {
-	code int `json:"code"`
-	msg string `json:"msg"`
-	details []string `json:"details"`
+	code int 
+	msg string 
+	details []string 
 }
 
 // 全局错误码
