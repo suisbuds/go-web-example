@@ -13,5 +13,6 @@ var (
 	UnauthorizedTokenInvalidSigningMethod = NewError(10000007, "鉴权失败，签名方法错误")
 	TooManyRequests           = NewError(10000008, "请求过多")
 	EnvVarNotSet              = NewError(10000009, "环境变量未设置")
+	RequestTimeout                      = NewError(10000010, "请求超时") 
 )
 

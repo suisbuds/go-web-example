@@ -19,6 +19,7 @@ App:
     - .jpg
     - .jpeg
     - .png
+  ContextTimeout: 60
 
 Database:
   DBType: postgres

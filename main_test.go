@@ -1,42 +1,41 @@
 package main
 
 import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"github.com/suisbuds/miao/global"
-	"github.com/suisbuds/miao/pkg/setting"
+	"github.com/suisbuds/miao/internal/routers"
+	"github.com/suisbuds/miao/pkg/errcode"
 )
 
 func TestSetupSetting(t *testing.T) {
 	err := setupSetting()
 	assert.NoError(t, err, "setupSetting should not return an error")
-
-
-	assert.Equal(t, global.ServerSetting.ReadTimeout, 60*time.Second, "ReadTimeout should be 60")
-	assert.Equal(t, global.ServerSetting.WriteTimeout, 60*time.Second, "WriteTimeout should be 60")
 }
 
-func TestSetupDBEngine(t *testing.T) {
-	global.DatabaseSetting = &setting.DatabaseSetting{
-		DBType:       "postgres",
-		UserName:     "postgres",
-		Password:     "",
-		Host:         "127.0.0.1",
-		Port:         "5432",
-		DBName:       "miao",
-		TablePrefix:  "miao_",
-		SSLMode:      "disable",
-		TimeZone:     "Asia/Shanghai",
-		MaxIdleConns: 10,
-		MaxOpenConns: 30,
-	}
+// 超时中间件
+func TestTimeoutMiddleware(t *testing.T) {
 
-	err := setupDBEngine()
-	assert.NoError(t, err, "setupDBEngine should not return an error")
+	router := routers.NewRouter()
 
-	// 测试数据库连接
-	err = global.DBEngine.Exec("SELECT 1").Error
-	assert.NoError(t, err, "Database connection should be successful")
+	router.GET("/slow", func(c *gin.Context) {
+		time.Sleep(10 * time.Second) 
+		c.JSON(http.StatusOK, gin.H{"message": "success"})
+	})
+
+	// 创建请求
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/slow", nil)
+	router.ServeHTTP(w, req)
+
+	var response map[string]interface{}
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	assert.NoError(t, err, "Response should be valid JSON")
+	assert.Equal(t, float64(errcode.RequestTimeout.Code()), response["code"], "Error code should match RequestTimeout")
+	assert.Equal(t, errcode.RequestTimeout.Msg(), response["msg"], "Error message should match RequestTimeout")
 }

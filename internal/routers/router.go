@@ -41,8 +41,10 @@ func NewRouter() *gin.Engine {
 		r.Use(middleware.Recovery()) // 捕获 panic 并发送邮件预警
 	}
 	r.Use(middleware.RateLimiter(authLimiter)) // 限流器
+	r.Use(middleware.ContextTimeout(global.AppSetting.ContextTimeout)) // 超时控制
 	r.Use(middleware.Translations())          // 翻译错误信息
 	r.Use(middleware.AppInfo())               // 获取应用信息
+
 
 	// 注册 API 端点
 	article := v1.NewArticle()
