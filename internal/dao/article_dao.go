@@ -7,12 +7,12 @@ import (
 
 // 可以改为 Repository 模式，将数据操作封装到 Repository 中，Dao 层只负责调用 Repository
 
-//  定义多个 Article 用于耦合 Article 和 Tag 以处理不同参数, 设计上的失败
+// 定义多个 Article 用于耦合 Article 和 Tag 以处理不同参数, 设计上的失败
 type Article struct {
 	ID            uint32 `json:"id"`
 	TagID         uint32 `json:"tag_id"`
 	Title         string `json:"title"`
-	Description          string `json:"description"`
+	Description   string `json:"description"`
 	Content       string `json:"content"`
 	CoverImageUrl string `json:"cover_image_url"`
 	CreatedBy     string `json:"created_by"`
@@ -23,7 +23,7 @@ type Article struct {
 func (d *Dao) CreateArticle(param *Article) (*models.Article, error) {
 	article := models.Article{
 		Title:         param.Title,
-		Description:          param.Description,
+		Description:   param.Description,
 		Content:       param.Content,
 		CoverImageUrl: param.CoverImageUrl,
 		State:         param.State,
@@ -59,7 +59,6 @@ func (d *Dao) UpdateArticle(param *Article) error {
 	return article.Update(d.engine, values)
 }
 
-
 func (d *Dao) DeleteArticle(id uint32) error {
 	article := models.Article{Model: &models.Model{ID: id}}
 	return article.Delete(d.engine)
@@ -74,4 +73,3 @@ func (d *Dao) CountArticleListByTagID(id uint32, state uint8) (int, error) {
 	article := models.Article{State: state}
 	return article.CountByTagID(d.engine, id)
 }
-

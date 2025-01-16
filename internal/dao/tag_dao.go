@@ -5,7 +5,6 @@ import (
 	"github.com/suisbuds/miao/pkg/app"
 )
 
-
 func (d *Dao) CreateTag(name string, state uint8, createdBy string) error {
 	tag := models.Tag{
 		Name:  name,
@@ -22,7 +21,6 @@ func (d *Dao) GetTag(id uint32, state uint8) (models.Tag, error) {
 	tag := models.Tag{Model: &models.Model{ID: id}, State: state}
 	return tag.Get(d.engine)
 }
-
 
 func (d *Dao) UpdateTag(id uint32, name string, state uint8, modifiedBy string) error {
 	tag := models.Tag{
@@ -45,7 +43,6 @@ func (d *Dao) DeleteTag(id uint32) error {
 	tag := models.Tag{Model: &models.Model{ID: id}}
 	return tag.Delete(d.engine)
 }
-
 
 func (d *Dao) GetTagList(name string, state uint8, page, pageSize int) ([]*models.Tag, error) {
 	tag := models.Tag{Name: name, State: state}

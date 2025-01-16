@@ -2,7 +2,6 @@ package dao
 
 import "github.com/suisbuds/miao/internal/models"
 
-
 func (d *Dao) CreateArticleTag(articleID, tagID uint32, createdBy string) error {
 	articleTag := models.ArticleTag{
 		Model: &models.Model{
@@ -13,7 +12,6 @@ func (d *Dao) CreateArticleTag(articleID, tagID uint32, createdBy string) error 
 	}
 	return articleTag.Create(d.engine)
 }
-
 
 func (d *Dao) GetArticleTagByArticleID(articleID uint32) (models.ArticleTag, error) {
 	articleTag := models.ArticleTag{ArticleID: articleID}
