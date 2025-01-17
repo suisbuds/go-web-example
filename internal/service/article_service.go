@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/suisbuds/miao/internal/dao"
-	"github.com/suisbuds/miao/internal/models"
+	"github.com/suisbuds/miao/internal/model"
 	"github.com/suisbuds/miao/pkg/app"
 )
 
@@ -45,13 +45,13 @@ type DeleteArticleRequest struct {
 }
 
 type Article struct {
-	ID            uint32      `json:"id"`
-	Title         string      `json:"title"`
-	Description   string      `json:"description"`
-	Content       string      `json:"content"`
-	CoverImageUrl string      `json:"cover_image_url"`
-	State         uint8       `json:"state"`
-	Tag           *models.Tag `json:"tag"`
+	ID            uint32     `json:"id"`
+	Title         string     `json:"title"`
+	Description   string     `json:"description"`
+	Content       string     `json:"content"`
+	CoverImageUrl string     `json:"cover_image_url"`
+	State         uint8      `json:"state"`
+	Tag           *model.Tag `json:"tag"`
 }
 
 func (svc *Service) CreateArticle(param *CreateArticleRequest) error {
@@ -86,7 +86,7 @@ func (svc *Service) GetArticle(param *ArticleRequest) (*Article, error) {
 		return nil, err
 	}
 
-	tag, err := svc.dao.GetTag(articleTag.TagID, models.STATE_OPEN)
+	tag, err := svc.dao.GetTag(articleTag.TagID, model.STATE_OPEN)
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +157,7 @@ func (svc *Service) GetArticleList(param *ArticleListRequest, pager *app.Pager) 
 			Description:   article.ArticleDescription,
 			Content:       article.Content,
 			CoverImageUrl: article.CoverImageUrl,
-			Tag:           &models.Tag{Model: &models.Model{ID: article.TagID}, Name: article.TagName},
+			Tag:           &model.Tag{Model: &model.Model{ID: article.TagID}, Name: article.TagName},
 		})
 	}
 

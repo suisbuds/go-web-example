@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/suisbuds/miao/global"
-	"github.com/suisbuds/miao/internal/models"
+	"github.com/suisbuds/miao/internal/model"
 	"github.com/suisbuds/miao/internal/routers"
 	"github.com/suisbuds/miao/pkg/logger"
 	"github.com/suisbuds/miao/pkg/setting"
@@ -173,7 +173,7 @@ func setupAccesser() error {
 func setupDBEngine() error {
 	var err error
 
-	global.DBEngine, err = models.NewDBEngine(global.DatabaseSetting)
+	global.DBEngine, err = model.NewDBEngine(global.DatabaseSetting)
 
 	if err != nil {
 		return err

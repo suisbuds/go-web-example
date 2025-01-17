@@ -1,4 +1,4 @@
-package models
+package model
 
 import (
 	"fmt"
@@ -72,10 +72,8 @@ func NewDBEngine(databaseSetting *setting.DatabaseSetting) (*gorm.DB, error) {
 	sqlDB.SetMaxIdleConns(databaseSetting.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(databaseSetting.MaxOpenConns)
 
-
 	return db, nil
 }
-
 
 // Hooks: CreatedAt, UpdatedAt, DeletedAt (Grom 内部的软删除) 会自动更新, IsDel 自定义不能自动更新
 // func (m *Model) BeforeCreate(db *gorm.DB) (err error) {

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/suisbuds/miao/internal/models"
+	"github.com/suisbuds/miao/internal/model"
 	"github.com/suisbuds/miao/pkg/app"
 )
 
@@ -40,7 +40,7 @@ func (svc *Service) CountTag(param *CountTagRequest) (int, error) {
 	return svc.dao.CountTag(param.Name, param.State)
 }
 
-func (svc *Service) GetTagList(param *TagListRequest, pager *app.Pager) ([]*models.Tag, error) {
+func (svc *Service) GetTagList(param *TagListRequest, pager *app.Pager) ([]*model.Tag, error) {
 	return svc.dao.GetTagList(param.Name, param.State, pager.Page, pager.PageSize)
 }
 

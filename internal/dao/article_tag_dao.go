@@ -1,10 +1,10 @@
 package dao
 
-import "github.com/suisbuds/miao/internal/models"
+import "github.com/suisbuds/miao/internal/model"
 
 func (d *Dao) CreateArticleTag(articleID, tagID uint32, createdBy string) error {
-	articleTag := models.ArticleTag{
-		Model: &models.Model{
+	articleTag := model.ArticleTag{
+		Model: &model.Model{
 			CreatedBy: createdBy,
 		},
 		ArticleID: articleID,
@@ -13,23 +13,23 @@ func (d *Dao) CreateArticleTag(articleID, tagID uint32, createdBy string) error 
 	return articleTag.Create(d.engine)
 }
 
-func (d *Dao) GetArticleTagByArticleID(articleID uint32) (models.ArticleTag, error) {
-	articleTag := models.ArticleTag{ArticleID: articleID}
+func (d *Dao) GetArticleTagByArticleID(articleID uint32) (model.ArticleTag, error) {
+	articleTag := model.ArticleTag{ArticleID: articleID}
 	return articleTag.GetByArticleID(d.engine)
 }
 
-func (d *Dao) GetArticleTagListByTagID(tagID uint32) ([]*models.ArticleTag, error) {
-	articleTag := models.ArticleTag{TagID: tagID}
+func (d *Dao) GetArticleTagListByTagID(tagID uint32) ([]*model.ArticleTag, error) {
+	articleTag := model.ArticleTag{TagID: tagID}
 	return articleTag.ListByTagID(d.engine)
 }
 
-func (d *Dao) GetArticleTagListByArticleIDs(articleIDs []uint32) ([]*models.ArticleTag, error) {
-	articleTag := models.ArticleTag{}
+func (d *Dao) GetArticleTagListByArticleIDs(articleIDs []uint32) ([]*model.ArticleTag, error) {
+	articleTag := model.ArticleTag{}
 	return articleTag.ListByArticleIDs(d.engine, articleIDs)
 }
 
 func (d *Dao) UpdateArticleTag(articleID, tagID uint32, modifiedBy string) error {
-	articleTag := models.ArticleTag{ArticleID: articleID}
+	articleTag := model.ArticleTag{ArticleID: articleID}
 	values := map[string]interface{}{
 		"article_id":  articleID,
 		"tag_id":      tagID,
@@ -39,6 +39,6 @@ func (d *Dao) UpdateArticleTag(articleID, tagID uint32, modifiedBy string) error
 }
 
 func (d *Dao) DeleteArticleTag(articleID uint32) error {
-	articleTag := models.ArticleTag{ArticleID: articleID}
+	articleTag := model.ArticleTag{ArticleID: articleID}
 	return articleTag.DeleteOne(d.engine)
 }

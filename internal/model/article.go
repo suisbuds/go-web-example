@@ -1,4 +1,4 @@
-package models
+package model
 
 import (
 	"github.com/suisbuds/miao/pkg/app"
@@ -75,33 +75,33 @@ func (a Article) Delete(db *gorm.DB) error {
 func (a Article) ListByTagID(db *gorm.DB, tagID uint32, pageOffset, pageSize int) ([]*ArticleRow, error) {
 
 	// 定义查询字段
-    fields := []string{
-        "ar.id AS article_id",
-        "ar.title AS article_title",
-        "ar.description AS article_description",
-        "ar.cover_image_url",
-        "ar.content",
-        "t.id AS tag_id",
-        "t.name AS tag_name",
-    }
+	fields := []string{
+		"ar.id AS article_id",
+		"ar.title AS article_title",
+		"ar.description AS article_description",
+		"ar.cover_image_url",
+		"ar.content",
+		"t.id AS tag_id",
+		"t.name AS tag_name",
+	}
 
 	// 设置分页
 	if pageOffset >= 0 && pageSize > 0 {
 		db = db.Offset(pageOffset).Limit(pageSize)
 	}
 
-    articleTagTable := ArticleTag{}.TableName()
-    tagTable := Tag{}.TableName()
-    articleTable := Article{}.TableName()
+	articleTagTable := ArticleTag{}.TableName()
+	tagTable := Tag{}.TableName()
+	articleTable := Article{}.TableName()
 
 	// 指定查询表和查询字段, 并将 Tag 表和 Article_Tag 表关联, Article 表和 Article_Tag 表关联, 然后 WHERE 筛选过滤
-    // SQL 查询语法
-    rows, err := db.Select(fields).
-        Table(articleTagTable + " AS at").
-        Joins("LEFT JOIN " + tagTable + " AS t ON at.tag_id = t.id").
-        Joins("LEFT JOIN " + articleTable + " AS ar ON at.article_id = ar.id").
-        Where("at.tag_id = ? AND ar.state = ? AND ar.is_del = ?", tagID, a.State, 0).
-        Rows() 
+	// SQL 查询语法
+	rows, err := db.Select(fields).
+		Table(articleTagTable+" AS at").
+		Joins("LEFT JOIN "+tagTable+" AS t ON at.tag_id = t.id").
+		Joins("LEFT JOIN "+articleTable+" AS ar ON at.article_id = ar.id").
+		Where("at.tag_id = ? AND ar.state = ? AND ar.is_del = ?", tagID, a.State, 0).
+		Rows()
 
 	if err != nil {
 		return nil, err

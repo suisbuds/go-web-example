@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"github.com/suisbuds/miao/internal/models"
+	"github.com/suisbuds/miao/internal/model"
 	"github.com/suisbuds/miao/pkg/app"
 )
 
@@ -20,25 +20,25 @@ type Article struct {
 	State         uint8  `json:"state"`
 }
 
-func (d *Dao) CreateArticle(param *Article) (*models.Article, error) {
-	article := models.Article{
+func (d *Dao) CreateArticle(param *Article) (*model.Article, error) {
+	article := model.Article{
 		Title:         param.Title,
 		Description:   param.Description,
 		Content:       param.Content,
 		CoverImageUrl: param.CoverImageUrl,
 		State:         param.State,
-		Model:         &models.Model{CreatedBy: param.CreatedBy},
+		Model:         &model.Model{CreatedBy: param.CreatedBy},
 	}
 	return article.Create(d.engine)
 }
 
-func (d *Dao) GetArticle(id uint32, state uint8) (models.Article, error) {
-	article := models.Article{Model: &models.Model{ID: id}, State: state}
+func (d *Dao) GetArticle(id uint32, state uint8) (model.Article, error) {
+	article := model.Article{Model: &model.Model{ID: id}, State: state}
 	return article.Get(d.engine)
 }
 
 func (d *Dao) UpdateArticle(param *Article) error {
-	article := models.Article{Model: &models.Model{ID: param.ID}}
+	article := model.Article{Model: &model.Model{ID: param.ID}}
 	values := map[string]interface{}{
 		"modified_by": param.ModifiedBy,
 		"state":       param.State,
@@ -60,16 +60,16 @@ func (d *Dao) UpdateArticle(param *Article) error {
 }
 
 func (d *Dao) DeleteArticle(id uint32) error {
-	article := models.Article{Model: &models.Model{ID: id}}
+	article := model.Article{Model: &model.Model{ID: id}}
 	return article.Delete(d.engine)
 }
 
-func (d *Dao) GetArticleListByTagID(id uint32, state uint8, page, pageSize int) ([]*models.ArticleRow, error) {
-	article := models.Article{State: state}
+func (d *Dao) GetArticleListByTagID(id uint32, state uint8, page, pageSize int) ([]*model.ArticleRow, error) {
+	article := model.Article{State: state}
 	return article.ListByTagID(d.engine, id, app.GetPageOffset(page, pageSize), pageSize)
 }
 
 func (d *Dao) CountArticleListByTagID(id uint32, state uint8) (int, error) {
-	article := models.Article{State: state}
+	article := model.Article{State: state}
 	return article.CountByTagID(d.engine, id)
 }

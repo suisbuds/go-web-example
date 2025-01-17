@@ -1,15 +1,15 @@
 package dao
 
 import (
-	"github.com/suisbuds/miao/internal/models"
+	"github.com/suisbuds/miao/internal/model"
 	"github.com/suisbuds/miao/pkg/app"
 )
 
 func (d *Dao) CreateTag(name string, state uint8, createdBy string) error {
-	tag := models.Tag{
+	tag := model.Tag{
 		Name:  name,
 		State: state,
-		Model: &models.Model{
+		Model: &model.Model{
 			CreatedBy: createdBy,
 		},
 	}
@@ -17,14 +17,14 @@ func (d *Dao) CreateTag(name string, state uint8, createdBy string) error {
 	return tag.Create(d.engine)
 }
 
-func (d *Dao) GetTag(id uint32, state uint8) (models.Tag, error) {
-	tag := models.Tag{Model: &models.Model{ID: id}, State: state}
+func (d *Dao) GetTag(id uint32, state uint8) (model.Tag, error) {
+	tag := model.Tag{Model: &model.Model{ID: id}, State: state}
 	return tag.Get(d.engine)
 }
 
 func (d *Dao) UpdateTag(id uint32, name string, state uint8, modifiedBy string) error {
-	tag := models.Tag{
-		Model: &models.Model{
+	tag := model.Tag{
+		Model: &model.Model{
 			ID: id,
 		},
 	}
@@ -40,22 +40,22 @@ func (d *Dao) UpdateTag(id uint32, name string, state uint8, modifiedBy string) 
 }
 
 func (d *Dao) DeleteTag(id uint32) error {
-	tag := models.Tag{Model: &models.Model{ID: id}}
+	tag := model.Tag{Model: &model.Model{ID: id}}
 	return tag.Delete(d.engine)
 }
 
-func (d *Dao) GetTagList(name string, state uint8, page, pageSize int) ([]*models.Tag, error) {
-	tag := models.Tag{Name: name, State: state}
+func (d *Dao) GetTagList(name string, state uint8, page, pageSize int) ([]*model.Tag, error) {
+	tag := model.Tag{Name: name, State: state}
 	pageOffset := app.GetPageOffset(page, pageSize)
 	return tag.List(d.engine, pageOffset, pageSize)
 }
 
-func (d *Dao) GetTagListByIDs(ids []uint32, state uint8) ([]*models.Tag, error) {
-	tag := models.Tag{State: state}
+func (d *Dao) GetTagListByIDs(ids []uint32, state uint8) ([]*model.Tag, error) {
+	tag := model.Tag{State: state}
 	return tag.ListByIDs(d.engine, ids)
 }
 
 func (d *Dao) CountTag(name string, state uint8) (int, error) {
-	tag := models.Tag{Name: name, State: state}
+	tag := model.Tag{Name: name, State: state}
 	return tag.Count(d.engine)
 }
