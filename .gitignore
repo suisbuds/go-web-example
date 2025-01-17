@@ -35,5 +35,10 @@ Thumbs.db
 bin/
 build/
 
-
+# Others
 /configs/config.yaml
+
+
+/docs/app/*.md
+
+/docs/cmd/*.md

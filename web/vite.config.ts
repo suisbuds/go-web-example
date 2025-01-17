@@ -5,6 +5,7 @@ import Unocss from 'unocss/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vitejs.dev/config/
+// 监听后端响应
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 

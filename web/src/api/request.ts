@@ -1,6 +1,7 @@
 import { getToken } from '@/utils/token'
 import { toast } from '@/composables/useToast'
 
+// 响应 HTTP 请求
 export async function handleResult(resp: Response) {
   if (resp.status !== 200) {
     let reason = await resp.text()
@@ -21,6 +22,7 @@ export async function handleResult(resp: Response) {
   return await resp.json()
 }
 
+// 发送请求函数
 export async function sendReq(method: string, url: RequestInfo, data?: any, headerInit?: HeadersInit) {
   const headers = new Headers({
     'Content-Type': 'application/json',
@@ -38,6 +40,7 @@ export async function sendReq(method: string, url: RequestInfo, data?: any, head
   return await handleResult(resp)
 }
 
+// 封装 HTTP 请求类
 class Request {
   async delete(url: RequestInfo, data?: any) {
     return await sendReq('DELETE', url, data)
@@ -66,5 +69,6 @@ class Request {
   }
 }
 
+// 导出请求类
 const request = new Request()
 export default request

@@ -3,6 +3,7 @@ import { decrypt, encrypt } from './crypto'
 // 7day
 const DEFAULT_CACHE_TIME = 7 * 24 * 60 * 60 * 1000
 
+// 设置本地存储
 export function setLocal(key: string, value: unknown, expire: number | null = DEFAULT_CACHE_TIME) {
   const storageData = {
     value,
@@ -11,6 +12,7 @@ export function setLocal(key: string, value: unknown, expire: number | null = DE
   window.localStorage.setItem(key, encrypt(storageData))
 }
 
+// 获取本地存储
 export function getLocal<T>(key: string) {
   const json = window.localStorage.getItem(key)
 
@@ -31,6 +33,7 @@ export function getLocal<T>(key: string) {
   return null
 }
 
+// 获取本地存储过期时间
 export function getLocalExpire(key: string): number | null {
   const json = window.localStorage.getItem(key)
 

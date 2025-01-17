@@ -5,9 +5,13 @@ import api from './api'
 import { useUserStore } from './store'
 import { getToken } from './utils/token'
 
+// 负责应用的路由配置, 导航和守卫 (vue-router: 路由管理)
+
+// Layout 包裹路由, 统一布局
 const Layout = () => import('@/layout/Layout.vue')
 
 // TODO: backend routes
+// 配置动态路由: 通过后端接口获取的用户权限或后台数据
 export const layoutDynamicRoutes: Array<RouteRecordRaw> = [
   {
     name: 'Home',
@@ -51,6 +55,7 @@ export const layoutDynamicRoutes: Array<RouteRecordRaw> = [
   },
 ]
 
+// 懒加载组件, 提高性能
 const routes: Array<RouteRecordRaw> = [
   {
     name: 'General',
@@ -71,6 +76,7 @@ const router = createRouter({
 })
 
 // login guard
+// 路由全局导航守卫, 控制路由访问权限, 验证用户是否已登陆, 未登陆则重定向到登陆页面
 router.beforeEach(async (to) => {
   if (to.path === '/signin' || to.path === '/signup')
     return true
@@ -80,7 +86,7 @@ router.beforeEach(async (to) => {
   try {
     const userInfo = await api.userInfo()
 
-    const userStore = useUserStore()
+    const userStore = useUserStore() // pinia 管理用户状态
     userStore.signin(userInfo)
 
     if (to.path === '/signin')

@@ -1,10 +1,9 @@
 package service
 
 import (
-	"github.com/suisbuds/miao/pkg/app"
 	"github.com/suisbuds/miao/internal/models"
+	"github.com/suisbuds/miao/pkg/app"
 )
-
 
 // 接口校验层, 封装标签模块业务逻辑, 与 Dao 层和 Router 层交互
 // Request 定义接口入参形式
@@ -12,7 +11,7 @@ import (
 
 type CountTagRequest struct {
 	Name  string `form:"name" binding:"max=100"`
-	State uint8 `form:"state,default=1" binding:"oneof=0 1"`
+	State uint8  `form:"state,default=1" binding:"oneof=0 1"`
 }
 
 type TagListRequest struct {
