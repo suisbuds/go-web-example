@@ -9,7 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"github.com/suisbuds/miao/internal/routers"
+	"github.com/suisbuds/miao/internal/router"
 	"github.com/suisbuds/miao/pkg/errcode"
 )
 
@@ -21,10 +21,10 @@ func TestSetupSetting(t *testing.T) {
 // 超时中间件
 func TestTimeoutMiddleware(t *testing.T) {
 
-	router := routers.NewRouter()
+	router := router.NewRouter()
 
 	router.GET("/slow", func(c *gin.Context) {
-		time.Sleep(10 * time.Second) 
+		time.Sleep(10 * time.Second)
 		c.JSON(http.StatusOK, gin.H{"message": "success"})
 	})
 

@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/suisbuds/miao/global"
 	"github.com/suisbuds/miao/internal/model"
-	"github.com/suisbuds/miao/internal/routers"
+	"github.com/suisbuds/miao/internal/router"
 	"github.com/suisbuds/miao/pkg/logger"
 	"github.com/suisbuds/miao/pkg/setting"
 	"github.com/suisbuds/miao/pkg/validator"
@@ -52,7 +52,7 @@ func init() {
 // @termsOfService https://github.com/suisbuds/miao
 func main() {
 	gin.SetMode(global.ServerSetting.RunMode)
-	router := routers.NewRouter()
+	router := router.NewRouter()
 	s := &http.Server{
 		Addr:           ":" + global.ServerSetting.HttpPort,
 		Handler:        router,

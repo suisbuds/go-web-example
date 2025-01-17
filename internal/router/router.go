@@ -1,4 +1,4 @@
-package routers
+package router
 
 import (
 	"net/http"
@@ -8,8 +8,8 @@ import (
 	_ "github.com/suisbuds/miao/docs"
 	"github.com/suisbuds/miao/global"
 	"github.com/suisbuds/miao/internal/middleware"
-	"github.com/suisbuds/miao/internal/routers/api"
-	v1 "github.com/suisbuds/miao/internal/routers/api/v1"
+	"github.com/suisbuds/miao/internal/router/api"
+	v1 "github.com/suisbuds/miao/internal/router/api/v1"
 	"github.com/suisbuds/miao/pkg/limiter"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
