@@ -1,6 +1,7 @@
 package main
 
 import (
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/suisbuds/miao/global"
@@ -43,7 +44,6 @@ func init() {
 	if err != nil {
 		log.Fatalf("init.setupValidator err: %v", err)
 	}
-
 }
 
 // @title miao
@@ -51,6 +51,7 @@ func init() {
 // @description My own Miao Blog
 // @termsOfService https://github.com/suisbuds/miao
 func main() {
+
 	gin.SetMode(global.ServerSetting.RunMode)
 	router := router.NewRouter()
 	s := &http.Server{
@@ -60,11 +61,7 @@ func main() {
 		WriteTimeout:   global.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
-
-	// 测试
-	// global.Logger.Logf(logger.DEBUG, logger.SINGLE, "%s: miao_blog/%s", "suisbuds", "miao")
-	// global.Zapper.Errorf("%s: miao_blog/%s", "suisbuds", "miao")
-	// base64.StdEncoding.DecodeString("xxx") // token-payload base64解码. 不要在 Payload 中明文存储敏感信息, 否则进行不可逆加密. JWT 过期时间存储在 payload 中, 一旦签发不可变更
+	
 
 	s.ListenAndServe()
 
@@ -188,3 +185,5 @@ func setupValidator() error {
 	binding.Validator = global.Validator // 实现 bind.Validation 接口, 替换成 MiaoValidator
 	return nil
 }
+
+

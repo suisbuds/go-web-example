@@ -1,8 +1,11 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <RouterView v-slot="{ Component }">
-    <component :is="Component" />
-  </RouterView>
+  <div id="app">
+    <router-view />
+  </div>
 </template>
+
+<script>
+export default {
+  name: 'App'
+}
+</script>
