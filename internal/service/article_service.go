@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/suisbuds/miao/global"
 	"github.com/suisbuds/miao/internal/dao"
 	"github.com/suisbuds/miao/internal/model"
 	"github.com/suisbuds/miao/pkg/app"
@@ -86,7 +87,7 @@ func (svc *Service) GetArticle(param *ArticleRequest) (*Article, error) {
 		return nil, err
 	}
 
-	tag, err := svc.dao.GetTag(articleTag.TagID, model.STATE_OPEN)
+	tag, err := svc.dao.GetTag(articleTag.TagID, global.STATE_OPEN)
 	if err != nil {
 		return nil, err
 	}

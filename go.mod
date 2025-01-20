@@ -50,6 +50,7 @@ require (
 	go.opentelemetry.io/otel/sdk/log v0.9.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v1.33.0 // indirect
 	go.opentelemetry.io/otel/trace v1.33.0 // indirect
+	go.uber.org/dig v1.18.0 // indirect
 	golang.org/x/tools v0.28.0 // indirect
 	golang.org/x/tools/cmd/gorename v0.1.0-deprecated // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect

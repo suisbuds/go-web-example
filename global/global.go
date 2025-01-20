@@ -10,7 +10,6 @@ import (
 )
 
 var (
-
 	// Settings
 	ServerSetting   *setting.ServerSetting
 	AppSetting      *setting.AppSetting

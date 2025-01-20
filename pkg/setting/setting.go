@@ -6,7 +6,7 @@ type Setting struct {
 	viper *viper.Viper
 }
 
-// Viper 读取配置文件 config.yaml
+// Viper 读取配置文件 configs/config.yaml
 func NewSetting() (*Setting, error) {
 
 	CheckEnv()

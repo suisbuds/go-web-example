@@ -168,8 +168,8 @@ func setupAccesser() error {
 }
 
 func setupDBEngine() error {
-	var err error
 
+	var err error
 	global.DBEngine, err = model.NewDBEngine(global.DatabaseSetting)
 
 	if err != nil {

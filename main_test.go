@@ -16,7 +16,7 @@ import (
 func TestSetupSetting(t *testing.T) {
 	err := setupSetting()
 	assert.NoError(t, err, "setupSetting should not return an error")
-	
+
 	// base64.StdEncoding.DecodeString("xxx") // token-payload base64解码. 不要在 Payload 中明文存储敏感信息, 否则进行不可逆加密. JWT 过期时间存储在 payload 中, 一旦签发不可变更
 
 }
