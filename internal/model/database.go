@@ -26,9 +26,10 @@ type Database struct {
 func (db *Database) connect(*setting.DatabaseSetting) error {
 
 	// 构建数据源 DSN
-	dsn := fmt.Sprintf("host=%s user=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
 		global.DatabaseSetting.Host,
 		global.DatabaseSetting.UserName,
+		global.DatabaseSetting.Password,
 		global.DatabaseSetting.DBName,
 		global.DatabaseSetting.Port,
 		global.DatabaseSetting.SSLMode,
