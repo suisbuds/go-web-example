@@ -11,6 +11,8 @@ type Article struct {
 	Description   string `json:"description"`
 	Content       string `json:"content"`
 	CoverImageUrl string `json:"cover_image_url"`
+	TagID         int    `json:"tag_id"`
+	Tag           Tag    `json:"tag"`
 	State         uint8  `json:"state"`
 }
 

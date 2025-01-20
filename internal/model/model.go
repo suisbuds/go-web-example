@@ -6,9 +6,9 @@ import (
 	"gorm.io/gorm"
 )
 
-// Model 层定义数据结构, 实现 ORM 映射, 定义字段验证规则和约束, 与数据库中的表一一对应
+// Model 层定义实体和字段约束,  与数据库中的表对应
 
-// 公共字段设置为 CreatedAt, ModifiedAt, DeletedAt 时 Gorm 可以自动更新, IsDel 软删除标记, ID 主键
+// Gorm 可以自动更新公共字段 CreatedAt, ModifiedAt, DeletedAt
 type Model struct {
 	ID         uint32         `gorm:"primary_key" json:"id"`
 	CreatedBy  string         `json:"created_by"`
@@ -16,7 +16,6 @@ type Model struct {
 	CreatedAt  time.Time      `json:"created_at"`
 	UpdatedAt  time.Time      `json:"updated_at"`
 	DeletedAt  gorm.DeletedAt `gorm:"index" json:"deleted_at"`
-	IsDel      uint8          `json:"is_del"`
 }
 
 
