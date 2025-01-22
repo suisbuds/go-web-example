@@ -8,13 +8,6 @@ import (
 
 // Repository 封装数据访问操作
 
-type Transaction interface{
-	Begin() error
-	Commit() error
-	Rollback() error
-	GetDB() *gorm.DB
-}
-
 type Repository struct {
 	engine *gorm.DB
 }
@@ -32,7 +25,6 @@ func (r *Repository) Create(value interface{}) error {
 	}
 	return nil
 }
-
 
 func (r *Repository) Get(where interface{}, out interface{}) error {
 	if err := r.engine.Where(where).First(out).Error; err != nil {
@@ -58,7 +50,6 @@ func (r *Repository) Delete(model interface{}, where interface{}) error {
 	return nil
 }
 
-
 func (r *Repository) List(out interface{}, where interface{}, pageOffset, pageSize int) error {
 	if err := r.engine.Where(where).Offset(pageOffset).Limit(pageSize).Find(out).Error; err != nil {
 		global.Logger.Logf(logger.ERROR, logger.SINGLE, "List model failed: %v", err)
@@ -76,3 +67,14 @@ func (r *Repository) Count(model interface{}, where interface{}) (int64, error) 
 	return count, nil
 }
 
+func (r *Repository) Save(value interface{}) error {
+	if err := r.engine.Save(value).Error; err != nil {
+		global.Logger.Logf(logger.ERROR, logger.SINGLE, "Save model failed: %v", err)
+		return err
+	}
+	return nil
+}
+
+func (r *Repository) BeginTransaction() *gorm.DB {
+	return r.engine.Begin()
+}

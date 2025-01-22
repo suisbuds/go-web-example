@@ -1,10 +1,7 @@
 package service
 
 import (
-	"github.com/suisbuds/miao/global"
 	"github.com/suisbuds/miao/internal/model"
-	"github.com/suisbuds/miao/internal/repository"
-	"github.com/suisbuds/miao/pkg/app"
 )
 
 // 定义接口参数形式
@@ -53,114 +50,4 @@ type Article struct {
 	CoverImageUrl string     `json:"cover_image_url"`
 	State         uint8      `json:"state"`
 	Tag           *model.Tag `json:"tag"`
-}
-
-func (svc *Service) CreateArticle(param *CreateArticleRequest) error {
-	article, err := svc.dao.CreateArticle(&repository.Article{
-		Title:         param.Title,
-		Description:   param.Description,
-		Content:       param.Content,
-		CoverImageUrl: param.CoverImageUrl,
-		State:         param.State,
-		CreatedBy:     param.CreatedBy,
-	})
-	if err != nil {
-		return err
-	}
-
-	err = svc.dao.CreateArticleTag(article.ID, param.TagID, param.CreatedBy)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (svc *Service) GetArticle(param *ArticleRequest) (*Article, error) {
-	article, err := svc.dao.GetArticle(param.ID, param.State)
-	if err != nil {
-		return nil, err
-	}
-
-	articleTag, err := svc.dao.GetArticleTagByArticleID(article.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	tag, err := svc.dao.GetTag(articleTag.TagID, global.STATE_OPEN)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Article{
-		ID:            article.ID,
-		Title:         article.Title,
-		Description:   article.Description,
-		Content:       article.Content,
-		CoverImageUrl: article.CoverImageUrl,
-		State:         article.State,
-		Tag:           &tag,
-	}, nil
-}
-
-func (svc *Service) UpdateArticle(param *UpdateArticleRequest) error {
-	err := svc.dao.UpdateArticle(&repository.Article{
-		ID:            param.ID,
-		Title:         param.Title,
-		Description:   param.Description,
-		Content:       param.Content,
-		CoverImageUrl: param.CoverImageUrl,
-		State:         param.State,
-		ModifiedBy:    param.ModifiedBy,
-	})
-	if err != nil {
-		return err
-	}
-
-	err = svc.dao.UpdateArticleTag(param.ID, param.TagID, param.ModifiedBy)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (svc *Service) DeleteArticle(param *DeleteArticleRequest) error {
-	err := svc.dao.DeleteArticle(param.ID)
-	if err != nil {
-		return err
-	}
-
-	err = svc.dao.DeleteArticleTag(param.ID)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (svc *Service) GetArticleList(param *ArticleListRequest, pager *app.Pager) ([]*Article, int, error) {
-	articleCount, err := svc.dao.CountArticleListByTagID(param.TagID, param.State)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	articles, err := svc.dao.GetArticleListByTagID(param.TagID, param.State, pager.Page, pager.PageSize)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	var articleList []*Article
-	for _, article := range articles {
-		articleList = append(articleList, &Article{
-			ID:            article.ArticleID,
-			Title:         article.ArticleTitle,
-			Description:   article.ArticleDescription,
-			Content:       article.Content,
-			CoverImageUrl: article.CoverImageUrl,
-			Tag:           &model.Tag{Model: &model.Model{ID: article.TagID}, Name: article.TagName},
-		})
-	}
-
-	return articleList, articleCount, nil
 }

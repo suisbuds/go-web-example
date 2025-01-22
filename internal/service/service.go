@@ -7,15 +7,15 @@ import (
 	"github.com/suisbuds/miao/internal/repository"
 )
 
-// Service 层封装业务逻辑, 与 Dao 层交互, 管理数据库事务, 定义接口
+// Service 层封装具体业务逻辑
 
 type Service struct {
-	ctx context.Context
-	dao *repository.Repository
+	ctx  context.Context
+	repo *repository.Repository
 }
 
 func New(ctx context.Context) Service {
 	svc := Service{ctx: ctx}
-	svc.dao = repository.New(global.DBEngine)
+	svc.repo = repository.New(global.DBEngine)
 	return svc
 }

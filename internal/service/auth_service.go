@@ -1,7 +1,6 @@
 package service
 
 import (
-
 	"github.com/suisbuds/miao/pkg/errcode"
 )
 
@@ -13,7 +12,7 @@ type AuthRequest struct {
 
 // 判断认证信息 ID 是否存在
 func (svc *Service) CheckAuth(param *AuthRequest) error {
-	auth, err := svc.dao.GetAuth(
+	auth, err := svc.repo.GetAuth(
 		param.AppKey,
 		param.AppSecret,
 	)
