@@ -11,7 +11,6 @@ import (
 type Tag struct {
 	*Model
 	Name  string `json:"name"`
-	State uint8  `json:"state"`
 }
 
 // 实现 Gorm 的接口，指定 Tag 对应的 pg 表名

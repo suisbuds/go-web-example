@@ -1,4 +1,4 @@
-package dao
+package repository
 
 import (
 	"github.com/suisbuds/miao/internal/model"
@@ -20,24 +20,23 @@ type Article struct {
 	State         uint8  `json:"state"`
 }
 
-func (d *Dao) CreateArticle(param *Article) (*model.Article, error) {
+func (d *Repository) CreateArticle(param *Article) (*model.Article, error) {
 	article := model.Article{
 		Title:         param.Title,
 		Description:   param.Description,
 		Content:       param.Content,
 		CoverImageUrl: param.CoverImageUrl,
-		State:         param.State,
-		Model:         &model.Model{CreatedBy: param.CreatedBy},
+		Model:         &model.Model{CreatedBy: param.CreatedBy, State: param.State},
 	}
 	return article.Create(d.engine)
 }
 
-func (d *Dao) GetArticle(id uint32, state uint8) (model.Article, error) {
-	article := model.Article{Model: &model.Model{ID: id}, State: state}
+func (d *Repository) GetArticle(id uint32, state uint8) (model.Article, error) {
+	article := model.Article{Model: &model.Model{ID: id, State: state}}
 	return article.Get(d.engine)
 }
 
-func (d *Dao) UpdateArticle(param *Article) error {
+func (d *Repository) UpdateArticle(param *Article) error {
 	article := model.Article{Model: &model.Model{ID: param.ID}}
 	values := map[string]interface{}{
 		"modified_by": param.ModifiedBy,
@@ -59,17 +58,17 @@ func (d *Dao) UpdateArticle(param *Article) error {
 	return article.Update(d.engine, values)
 }
 
-func (d *Dao) DeleteArticle(id uint32) error {
+func (d *Repository) DeleteArticle(id uint32) error {
 	article := model.Article{Model: &model.Model{ID: id}}
 	return article.Delete(d.engine)
 }
 
-func (d *Dao) GetArticleListByTagID(id uint32, state uint8, page, pageSize int) ([]*model.ArticleRow, error) {
-	article := model.Article{State: state}
+func (d *Repository) GetArticleListByTagID(id uint32, state uint8, page, pageSize int) ([]*model.ArticleRow, error) {
+	article := model.Article{Model: &model.Model{State: state}}
 	return article.ListByTagID(d.engine, id, app.GetPageOffset(page, pageSize), pageSize)
 }
 
-func (d *Dao) CountArticleListByTagID(id uint32, state uint8) (int, error) {
-	article := model.Article{State: state}
+func (d *Repository) CountArticleListByTagID(id uint32, state uint8) (int, error) {
+	article := model.Article{Model: &model.Model{State: state}}
 	return article.CountByTagID(d.engine, id)
 }

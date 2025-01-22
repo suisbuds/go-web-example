@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/suisbuds/miao/global"
-	"github.com/suisbuds/miao/internal/dao"
 	"github.com/suisbuds/miao/internal/model"
+	"github.com/suisbuds/miao/internal/repository"
 	"github.com/suisbuds/miao/pkg/app"
 )
 
@@ -56,7 +56,7 @@ type Article struct {
 }
 
 func (svc *Service) CreateArticle(param *CreateArticleRequest) error {
-	article, err := svc.dao.CreateArticle(&dao.Article{
+	article, err := svc.dao.CreateArticle(&repository.Article{
 		Title:         param.Title,
 		Description:   param.Description,
 		Content:       param.Content,
@@ -104,7 +104,7 @@ func (svc *Service) GetArticle(param *ArticleRequest) (*Article, error) {
 }
 
 func (svc *Service) UpdateArticle(param *UpdateArticleRequest) error {
-	err := svc.dao.UpdateArticle(&dao.Article{
+	err := svc.dao.UpdateArticle(&repository.Article{
 		ID:            param.ID,
 		Title:         param.Title,
 		Description:   param.Description,

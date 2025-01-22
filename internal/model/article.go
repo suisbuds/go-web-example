@@ -13,7 +13,6 @@ type Article struct {
 	CoverImageUrl string `json:"cover_image_url"`
 	TagID         int    `json:"tag_id"`
 	Tag           Tag    `json:"tag"`
-	State         uint8  `json:"state"`
 }
 
 type ArticleRow struct {
@@ -27,7 +26,7 @@ type ArticleRow struct {
 }
 
 func (a Article) TableName() string {
-	return "miao_article"
+	return "mio_article"
 }
 
 type ArticleSwagger struct {

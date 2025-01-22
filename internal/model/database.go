@@ -11,13 +11,6 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-// 数据库接口
-type DatabaseIface interface {
-	// 初始化数据库配置
-	connect(*setting.DatabaseSetting) error
-	// 返回 DB 实例
-	getDB() *gorm.DB
-}
 
 type Database struct {
 	DB *gorm.DB
