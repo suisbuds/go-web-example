@@ -1,5 +1,7 @@
 package model
 
+import "github.com/suisbuds/miao/pkg/app"
+
 
 type Role struct {
 	*Model
@@ -10,4 +12,9 @@ type Role struct {
 
 func (r Role) TableName() string {
 	return "mio_role"
+}
+
+type RoleSwagger struct {
+	List  []*Role
+	Pager *app.Pager
 }

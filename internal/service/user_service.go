@@ -45,6 +45,24 @@ type CheckUserRequest struct {
 }
 
 
+func CreateUser(){}
+
+func UpdateUser(){}
+
+func DeleteUser(){}
+
+func GetUser(){}
+
+func GetUsers(){}
+
+func GetUserAvatar(){}
+
+func GetRole(){}
+
+
+
+func CheckUser(){}
+
 
 
 

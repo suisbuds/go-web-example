@@ -34,7 +34,7 @@ func (r *Repository) UpdateUser(user *model.User, role *model.Role) error {
 		return err
 	}
 	if err := tx.Save(role).Error; err != nil {
-		global.Logger.Logf(logger.ERROR, logger.SINGLE, "Update user failed: %v", err)
+		global.Logger.Logf(logger.ERROR, logger.SINGLE, "Update role failed: %v", err)
 		tx.Rollback()
 		return err
 	}
@@ -58,11 +58,11 @@ func (r *Repository) DeleteUser(id uint32) error {
 	return nil
 }
 
-func (r *Repository) GetUsers(pageOffset, pageSize int, where interface{}) ([]*model.User, error) {
+func (r *Repository) GetUserList(pageOffset, pageSize int, where interface{}) ([]*model.User, error) {
 	var users []*model.User
 	err := r.List(&users, where, pageOffset, pageSize)
 	if err != nil {
-		global.Logger.Logf(logger.ERROR, logger.SINGLE, "Get users failed: %v", err)
+		global.Logger.Logf(logger.ERROR, logger.SINGLE, "Get user list failed: %v", err)
 		return nil, err
 	}
 	return users, nil

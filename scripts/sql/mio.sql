@@ -51,7 +51,7 @@ CREATE TABLE mio_user (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ,
-    state SMALLINT NOT NULL DEFAULT 1,      -- 0禁用、1启用
+    state SMALLINT NOT NULL DEFAULT 1, 
     
     username VARCHAR(50) NOT NULL DEFAULT '',
     password VARCHAR(50) DEFAULT '',
@@ -177,7 +177,7 @@ CREATE TABLE mio_menu (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ,
-    state SMALLINT NOT NULL DEFAULT 1, -- 0禁用、1启用
+    state SMALLINT NOT NULL DEFAULT 1,
     
     menu_name VARCHAR(50) NOT NULL DEFAULT '',
     url VARCHAR(255) DEFAULT '',
