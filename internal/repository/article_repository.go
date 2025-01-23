@@ -2,6 +2,7 @@ package repository
 
 
 // 定义多个 Article 用于耦合 Article 和 Tag 以处理不同参数, 设计上的失败
+
 type Article struct {
 	ID            uint32 `json:"id"`
 	TagID         uint32 `json:"tag_id"`

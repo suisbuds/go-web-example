@@ -36,7 +36,7 @@ func (db *Database) connect(*setting.DatabaseSetting) error {
 		newLogger = logger.Default.LogMode(logger.Silent)
 	}
 
-	// gorm 连接 pg
+	// gorm 连接 postgres 
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 		NamingStrategy: schema.NamingStrategy{
@@ -47,7 +47,7 @@ func (db *Database) connect(*setting.DatabaseSetting) error {
 		return err
 	}
 
-	// 获取 DB 对象
+	// 获取 DB 实例
 	sqlDB, err := database.DB()
 	if err != nil {
 		return err

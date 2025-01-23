@@ -25,7 +25,7 @@ func NewArticle() Article {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/articles [post]
-func (a Article) Create(c *gin.Context) {
+func (a Article) CreateArticle(c *gin.Context) {
 
 }
 
@@ -36,7 +36,7 @@ func (a Article) Create(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/articles/{id} [get]
-func (a Article) Get(c *gin.Context) {}
+func (a Article) GetArticle(c *gin.Context) {}
 
 // @Summary 获取多个文章
 // @Produce json
@@ -49,7 +49,7 @@ func (a Article) Get(c *gin.Context) {}
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/articles [get]
-func (a Article) List(c *gin.Context) {
+func (a Article) GetArticleList(c *gin.Context) {
 
 }
 
@@ -65,7 +65,7 @@ func (a Article) List(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/articles/{id} [put]
-func (a Article) Update(c *gin.Context) {
+func (a Article) UpdateArticle(c *gin.Context) {
 }
 
 // @Summary 删除文章
@@ -75,4 +75,4 @@ func (a Article) Update(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/articles/{id} [delete]
-func (a Article) Delete(c *gin.Context) {}
+func (a Article) DeleteArticle(c *gin.Context) {}

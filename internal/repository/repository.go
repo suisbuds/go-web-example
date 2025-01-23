@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// Repository 封装数据访问操作
+// Repository 层封装数据库操作
 
 type Repository struct {
 	engine *gorm.DB
@@ -58,6 +58,8 @@ func (r *Repository) Count(model interface{}, where interface{}) (int64, error) 
 	}
 	return count, nil
 }
+
+// 事务
 
 func (r *Repository) Save(value interface{}) error {
 	if err := r.engine.Save(value).Error; err != nil {

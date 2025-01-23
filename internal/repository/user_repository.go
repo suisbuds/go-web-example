@@ -23,23 +23,17 @@ func (r *Repository) GetUser(where interface{}) (*model.User, error) {
 	return &user, nil
 }
 
-func (r *Repository) UpdateUser(user *model.User) error {
-	tx := r.BeginTransaction()
-	if err := tx.Save(user).Error; err != nil {
-		tx.Rollback()
+func (r *Repository) UpdateUser(values interface{}, where interface{}) error {
+	if err := r.Update(&model.User{}, where, values); err != nil {
 		return err
 	}
-	tx.Commit()
 	return nil
 }
 
 func (r *Repository) DeleteUser(id uint32) error {
-	tx:= r.BeginTransaction()
-	if err := tx.Where(&model.User{Model: &model.Model{ID: id}}).Delete(&model.User{}).Error; err != nil {
-		tx.Rollback()
+	if err := r.Delete(&model.User{}, &model.User{Model: &model.Model{ID: id}}); err != nil {
 		return err
 	}
-	tx.Commit()
 	return nil
 }
 

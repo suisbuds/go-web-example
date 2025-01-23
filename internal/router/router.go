@@ -69,20 +69,20 @@ func NewRouter() *gin.Engine {
 		// 注册 Tag & Article 路由接口并配置 Handlers
 
 		// 测试 Tag 接口: 创建 Tag, 获取 Tag 列表, 更新 Tag, 删除 Tag
-		apiv1.POST("/tags", tag.Create)
-		apiv1.GET("/tags", tag.List)
-		apiv1.PUT("/tags/:id", tag.Update)
-		apiv1.PATCH("/tags/:id/state", tag.Update)
-		apiv1.DELETE("/tags/:id", tag.Delete)
+		apiv1.POST("/tags", tag.CreateTag)
+		apiv1.GET("/tags", tag.GetTagList)
+		apiv1.PUT("/tags/:id", tag.UpdateTag)
+		apiv1.PATCH("/tags/:id/state", tag.UpdateTag)
+		apiv1.DELETE("/tags/:id", tag.DeleteTag)
 
 		// 验证 Article 接口时必须确保 TagID 和 ArticleID 的对应, 并且根据接口文档调用 (定义好接口后再生成接口文档)
 		// 测试 Article 接口: 创建 Article, 获取指定 Article, 获取 Article 列表, 更新 Article, 删除 Article
-		apiv1.POST("/articles", article.Create)
-		apiv1.GET("/articles/:id", article.Get)
-		apiv1.GET("/articles", article.List)
-		apiv1.PUT("/articles/:id", article.Update)
-		apiv1.PATCH("/articles/:id/state", article.Update)
-		apiv1.DELETE("/articles/:id", article.Delete)
+		apiv1.POST("/articles", article.CreateArticle)
+		apiv1.GET("/articles/:id", article.GetArticle)
+		apiv1.GET("/articles", article.GetArticleList)
+		apiv1.PUT("/articles/:id", article.UpdateArticle)
+		apiv1.PATCH("/articles/:id/state", article.UpdateArticle)
+		apiv1.DELETE("/articles/:id", article.DeleteArticle)
 	}
 
 	return r

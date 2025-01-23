@@ -2,7 +2,6 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-
 )
 
 // URL -> Router -> Handler, 版本化管理接口 API 确保向后兼容, 与 Service 层交互, 调用 Service 层具体的业务操作
@@ -14,6 +13,19 @@ func NewTag() Tag {
 	return Tag{}
 }
 
+// @Summary 新增标签
+// @Produce  json
+// @Param name body string true "标签名称" minlength(3) maxlength(100)
+// @Param state body int false "状态" Enums(0, 1) default(1)
+// @Param created_by body string true "创建者" minlength(3) maxlength(100)
+// @Success 200 {object} models.TagSwagger "成功"
+// @Failure 400 {object} errcode.Error "请求错误"
+// @Failure 500 {object} errcode.Error "内部错误"
+// @Router /api/v1/tags [post]
+func (t Tag) CreateTag(c *gin.Context) {
+
+}
+
 // @Summary 获取单个标签
 // @Produce  json
 // @Param id path int true "标签 ID"
@@ -21,7 +33,7 @@ func NewTag() Tag {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags/{id} [get]
-func (t Tag) Get(c *gin.Context) {
+func (t Tag) GetTag(c *gin.Context) {
 }
 
 // @Summary 获取多个标签
@@ -34,20 +46,7 @@ func (t Tag) Get(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags [get]
-func (t Tag) List(c *gin.Context) {
-	
-}
-
-// @Summary 新增标签
-// @Produce  json
-// @Param name body string true "标签名称" minlength(3) maxlength(100)
-// @Param state body int false "状态" Enums(0, 1) default(1)
-// @Param created_by body string true "创建者" minlength(3) maxlength(100)
-// @Success 200 {object} models.TagSwagger "成功"
-// @Failure 400 {object} errcode.Error "请求错误"
-// @Failure 500 {object} errcode.Error "内部错误"
-// @Router /api/v1/tags [post]
-func (t Tag) Create(c *gin.Context) {
+func (t Tag) GetTagList(c *gin.Context) {
 
 }
 
@@ -61,7 +60,7 @@ func (t Tag) Create(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags/{id} [put]
-func (t Tag) Update(c *gin.Context) {
+func (t Tag) UpdateTag(c *gin.Context) {
 }
 
 // @Summary 删除标签
@@ -71,6 +70,6 @@ func (t Tag) Update(c *gin.Context) {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags/{id} [delete]
-func (t Tag) Delete(c *gin.Context) {
+func (t Tag) DeleteTag(c *gin.Context) {
 
 }
