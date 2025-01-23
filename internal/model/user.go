@@ -12,12 +12,6 @@ type User struct {
 	UserType uint8  `json:"user_type"`
 }
 
-// 用户身份
-type UserRole struct {
-	Username  string
-	UserRoles []*Role
-}
-
 func (u User) TableName() string {
 	return "mio_user"
 }
@@ -26,5 +20,3 @@ type UserSwagger struct {
 	List  []*User
 	Pager *app.Pager
 }
-
-

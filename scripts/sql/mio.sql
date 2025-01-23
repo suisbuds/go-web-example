@@ -84,7 +84,7 @@ CREATE TABLE mio_tag (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ,
-    state SMALLINT NOT NULL DEFAULT 1, -- 0禁用、1启用
+    state SMALLINT NOT NULL DEFAULT 1, 
     
     name VARCHAR(100) DEFAULT ''
 );
@@ -111,7 +111,7 @@ CREATE TABLE mio_article (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ,
-    state SMALLINT NOT NULL DEFAULT 1, -- 0草稿、1已发布、2删除
+    state SMALLINT NOT NULL DEFAULT 1, -- 0草稿、1发布、2删除
     
     tag_id INT DEFAULT 0,
     title VARCHAR(100) DEFAULT '',
@@ -139,96 +139,96 @@ COMMENT ON COLUMN mio_article.cover_image_url IS '封面图片地址';
 -- 创建 mio_role 表
 -- ----------------------------
 DROP TABLE IF EXISTS mio_role;
-CREATE TABLE mio_role (
-    id SERIAL PRIMARY KEY,
-    created_by VARCHAR(100) NOT NULL DEFAULT '',
-    modified_by VARCHAR(100) NOT NULL DEFAULT '',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    deleted_at TIMESTAMPTZ,
-    state SMALLINT NOT NULL DEFAULT 1,
+-- CREATE TABLE mio_role (
+--     id SERIAL PRIMARY KEY,
+--     created_by VARCHAR(100) NOT NULL DEFAULT '',
+--     modified_by VARCHAR(100) NOT NULL DEFAULT '',
+--     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--     deleted_at TIMESTAMPTZ,
+--     state SMALLINT NOT NULL DEFAULT 1,
     
-    user_id INT NOT NULL,
-    user_name VARCHAR(50) NOT NULL DEFAULT '',
-    value VARCHAR(50) DEFAULT ''
-);
+--     user_id INT NOT NULL,
+--     user_name VARCHAR(50) NOT NULL DEFAULT '',
+--     value VARCHAR(50) DEFAULT ''
+-- );
 
-COMMENT ON TABLE mio_role IS '角色管理';
+-- COMMENT ON TABLE mio_role IS '角色管理';
 
-COMMENT ON COLUMN mio_role.id IS '主键 ID';
-COMMENT ON COLUMN mio_role.created_by IS '创建人';
-COMMENT ON COLUMN mio_role.modified_by IS '修改人';
-COMMENT ON COLUMN mio_role.created_at IS '创建时间';
-COMMENT ON COLUMN mio_role.updated_at IS '修改时间';
-COMMENT ON COLUMN mio_role.deleted_at IS '删除时间';
-COMMENT ON COLUMN mio_role.state IS '状态';
-COMMENT ON COLUMN mio_role.user_id IS '用户 ID';
-COMMENT ON COLUMN mio_role.user_name IS '用户名';
-COMMENT ON COLUMN mio_role.value IS '用户属性';
+-- COMMENT ON COLUMN mio_role.id IS '主键 ID';
+-- COMMENT ON COLUMN mio_role.created_by IS '创建人';
+-- COMMENT ON COLUMN mio_role.modified_by IS '修改人';
+-- COMMENT ON COLUMN mio_role.created_at IS '创建时间';
+-- COMMENT ON COLUMN mio_role.updated_at IS '修改时间';
+-- COMMENT ON COLUMN mio_role.deleted_at IS '删除时间';
+-- COMMENT ON COLUMN mio_role.state IS '状态';
+-- COMMENT ON COLUMN mio_role.user_id IS '用户 ID';
+-- COMMENT ON COLUMN mio_role.user_name IS '用户名';
+-- COMMENT ON COLUMN mio_role.value IS '用户属性';
 
 -- ----------------------------
 -- 创建 mio_menu 表
 -- ----------------------------
 DROP TABLE IF EXISTS mio_menu;
-CREATE TABLE mio_menu (
-    id SERIAL PRIMARY KEY,
-    created_by VARCHAR(100) NOT NULL DEFAULT '',
-    modified_by VARCHAR(100) NOT NULL DEFAULT '',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    deleted_at TIMESTAMPTZ,
-    state SMALLINT NOT NULL DEFAULT 1,
+-- CREATE TABLE mio_menu (
+--     id SERIAL PRIMARY KEY,
+--     created_by VARCHAR(100) NOT NULL DEFAULT '',
+--     modified_by VARCHAR(100) NOT NULL DEFAULT '',
+--     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--     deleted_at TIMESTAMPTZ,
+--     state SMALLINT NOT NULL DEFAULT 1,
     
-    menu_name VARCHAR(50) NOT NULL DEFAULT '',
-    url VARCHAR(255) DEFAULT '',
-    parent_id INT NOT NULL,
-    parent_name VARCHAR(50) NOT NULL DEFAULT '',
-    level SMALLINT NOT NULL DEFAULT 2 -- 菜单等级
-);
+--     menu_name VARCHAR(50) NOT NULL DEFAULT '',
+--     url VARCHAR(255) DEFAULT '',
+--     parent_id INT NOT NULL,
+--     parent_name VARCHAR(50) NOT NULL DEFAULT '',
+--     level SMALLINT NOT NULL DEFAULT 2 -- 菜单等级
+-- );
 
-COMMENT ON TABLE mio_menu IS '菜单管理';
+-- COMMENT ON TABLE mio_menu IS '菜单管理';
 
-COMMENT ON COLUMN mio_menu.id IS '主键 ID';
-COMMENT ON COLUMN mio_menu.created_by IS '创建人';
-COMMENT ON COLUMN mio_menu.modified_by IS '修改人';
-COMMENT ON COLUMN mio_menu.created_at IS '创建时间';
-COMMENT ON COLUMN mio_menu.updated_at IS '修改时间';
-COMMENT ON COLUMN mio_menu.deleted_at IS '删除时间';
-COMMENT ON COLUMN mio_menu.state IS '状态';
-COMMENT ON COLUMN mio_menu.menu_name IS '菜单名称';
-COMMENT ON COLUMN mio_menu.url IS '菜单地址';
-COMMENT ON COLUMN mio_menu.parent_id IS '父级菜单 ID';
-COMMENT ON COLUMN mio_menu.parent_name IS '父级菜单名称';
-COMMENT ON COLUMN mio_menu.level IS '菜单级别';
+-- COMMENT ON COLUMN mio_menu.id IS '主键 ID';
+-- COMMENT ON COLUMN mio_menu.created_by IS '创建人';
+-- COMMENT ON COLUMN mio_menu.modified_by IS '修改人';
+-- COMMENT ON COLUMN mio_menu.created_at IS '创建时间';
+-- COMMENT ON COLUMN mio_menu.updated_at IS '修改时间';
+-- COMMENT ON COLUMN mio_menu.deleted_at IS '删除时间';
+-- COMMENT ON COLUMN mio_menu.state IS '状态';
+-- COMMENT ON COLUMN mio_menu.menu_name IS '菜单名称';
+-- COMMENT ON COLUMN mio_menu.url IS '菜单地址';
+-- COMMENT ON COLUMN mio_menu.parent_id IS '父级菜单 ID';
+-- COMMENT ON COLUMN mio_menu.parent_name IS '父级菜单名称';
+-- COMMENT ON COLUMN mio_menu.level IS '菜单级别';
 
 -- ----------------------------
 -- 创建 mio_role_menu 表
 -- ----------------------------
 DROP TABLE IF EXISTS mio_role_menu;
-CREATE TABLE mio_role_menu (
-    id SERIAL PRIMARY KEY,
-    created_by VARCHAR(100) NOT NULL DEFAULT '',
-    modified_by VARCHAR(100) NOT NULL DEFAULT '',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    deleted_at TIMESTAMPTZ,
-    state SMALLINT NOT NULL DEFAULT 1,
+-- CREATE TABLE mio_role_menu (
+--     id SERIAL PRIMARY KEY,
+--     created_by VARCHAR(100) NOT NULL DEFAULT '',
+--     modified_by VARCHAR(100) NOT NULL DEFAULT '',
+--     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+--     deleted_at TIMESTAMPTZ,
+--     state SMALLINT NOT NULL DEFAULT 1,
     
-    role_id INT NOT NULL,
-    menu_id INT NOT NULL
-);
+--     role_id INT NOT NULL,
+--     menu_id INT NOT NULL
+-- );
 
-COMMENT ON TABLE mio_role_menu IS '角色菜单关联';
+-- COMMENT ON TABLE mio_role_menu IS '角色菜单关联';
 
-COMMENT ON COLUMN mio_role_menu.id IS '主键 ID';
-COMMENT ON COLUMN mio_role_menu.created_by IS '创建人';
-COMMENT ON COLUMN mio_role_menu.modified_by IS '修改人';
-COMMENT ON COLUMN mio_role_menu.created_at IS '创建时间';
-COMMENT ON COLUMN mio_role_menu.updated_at IS '修改时间';
-COMMENT ON COLUMN mio_role_menu.deleted_at IS '删除时间';
-COMMENT ON COLUMN mio_role_menu.state IS '状态';
-COMMENT ON COLUMN mio_role_menu.role_id IS '角色 ID';
-COMMENT ON COLUMN mio_role_menu.menu_id IS '菜单 ID';
+-- COMMENT ON COLUMN mio_role_menu.id IS '主键 ID';
+-- COMMENT ON COLUMN mio_role_menu.created_by IS '创建人';
+-- COMMENT ON COLUMN mio_role_menu.modified_by IS '修改人';
+-- COMMENT ON COLUMN mio_role_menu.created_at IS '创建时间';
+-- COMMENT ON COLUMN mio_role_menu.updated_at IS '修改时间';
+-- COMMENT ON COLUMN mio_role_menu.deleted_at IS '删除时间';
+-- COMMENT ON COLUMN mio_role_menu.state IS '状态';
+-- COMMENT ON COLUMN mio_role_menu.role_id IS '角色 ID';
+-- COMMENT ON COLUMN mio_role_menu.menu_id IS '菜单 ID';
 
 -- ----------------------------
 -- 插入初始数据
@@ -250,19 +250,19 @@ VALUES
     (2, 'test-created', 'test-created', 1, 'test2', 'test-desc', 'test-content', '', 2, '2019-08-19 21:00:48+00', '2019-08-19 21:00:48+00', NULL),
     (3, 'test-created', 'test-created', 1, 'test3', 'test-desc', 'test-content', '', 1, '2019-08-19 21:00:49+00', '2019-08-19 21:00:49+00', NULL);
 
-INSERT INTO mio_role (id, created_by, modified_by, user_id, user_name, value, created_at, updated_at, deleted_at)
-VALUES
-    (1, 'admin', 'admin', 1, 'admin', 'admin', '2019-08-19 21:00:39+00', '2019-08-19 21:00:39+00', NULL),
-    (2, 'admin', 'admin', 1, 'admin', 'test', '2019-08-19 21:00:39+00', '2019-08-19 21:00:39+00', NULL),
-    (3, 'test', 'test', 2, 'test', 'test', '2019-08-19 21:00:39+00', '2019-08-19 21:00:39+00', NULL);
+-- INSERT INTO mio_role (id, created_by, modified_by, user_id, user_name, value, created_at, updated_at, deleted_at)
+-- VALUES
+--     (1, 'admin', 'admin', 1, 'admin', 'admin', '2019-08-19 21:00:39+00', '2019-08-19 21:00:39+00', NULL),
+--     (2, 'admin', 'admin', 1, 'admin', 'test', '2019-08-19 21:00:39+00', '2019-08-19 21:00:39+00', NULL),
+--     (3, 'test', 'test', 2, 'test', 'test', '2019-08-19 21:00:39+00', '2019-08-19 21:00:39+00', NULL);
 
-INSERT INTO mio_menu (id, created_by, modified_by, menu_name, url, parent_id, parent_name, level, state, created_at, updated_at, deleted_at)
-VALUES
-    (1, 'admin', 'admin', 'Dashboard', '/dashboard', 0, 'Root', 1, 1, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL),
-    (2, 'admin', 'admin', 'Settings', '/settings', 0, 'Root', 1, 1, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL);
+-- INSERT INTO mio_menu (id, created_by, modified_by, menu_name, url, parent_id, parent_name, level, state, created_at, updated_at, deleted_at)
+-- VALUES
+--     (1, 'admin', 'admin', 'Dashboard', '/dashboard', 0, 'Root', 1, 1, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL),
+--     (2, 'admin', 'admin', 'Settings', '/settings', 0, 'Root', 1, 1, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL);
 
-INSERT INTO mio_role_menu (id, created_by, modified_by, role_id, menu_id, created_at, updated_at, deleted_at)
-VALUES
-    (1, 'admin', 'admin', 1, 1, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL),
-    (2, 'admin', 'admin', 1, 2, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL),
-    (3, 'admin', 'admin', 2, 1, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL);
+-- INSERT INTO mio_role_menu (id, created_by, modified_by, role_id, menu_id, created_at, updated_at, deleted_at)
+-- VALUES
+--     (1, 'admin', 'admin', 1, 1, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL),
+--     (2, 'admin', 'admin', 1, 2, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL),
+--     (3, 'admin', 'admin', 2, 1, '2023-01-01 00:00:00+00', '2023-01-01 00:00:00+00', NULL);
