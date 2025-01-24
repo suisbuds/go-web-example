@@ -21,7 +21,7 @@ type GetUserRequest struct {
 }
 
 type GetUserListRequest struct {
-	UserType uint8 `form:"user_type" binding:"omitempty,oneof=1 2"`
+	UserType uint8 `form:"user_type,default=1" binding:"oneof=1 2"`
 	State    uint8 `form:"state,default=1" binding:"oneof=0 1"`
 }
 
@@ -48,6 +48,7 @@ func (svc *Service) CreateUser(req *CreateUserRequest) error {
 		Password: req.Password,
 		Avatar:   req.Avatar,
 		UserType: req.UserType,
+		Model:    &model.Model{CreatedBy: req.CreatedBy},
 	}
 	return svc.repo.CreateUser(user)
 }
@@ -56,7 +57,7 @@ func (svc *Service) GetUser(req *GetUserRequest) (*model.User, error) {
 	return svc.repo.GetUser(map[string]interface{}{"id": req.ID, "state": req.State})
 }
 
-func (svc *Service) GetUserList(req *GetUserListRequest, pager *app.Pager) ([]*model.User, error) {
+func (svc *Service) GetUserList(req *GetUserListRequest, pager *app.Pager) ([]*model.User, int64, error) {
 	return svc.repo.GetUserList(pager.Page, pager.PageSize, map[string]interface{}{"user_type": req.UserType, "state": req.State})
 }
 

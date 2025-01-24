@@ -5,9 +5,8 @@ import (
 	"github.com/suisbuds/miao/pkg/app"
 )
 
-
 func (r *Repository) CreateUser(user *model.User) error {
-	err := r.Create(user)
+	err := r.create(user)
 	if err != nil {
 		return err
 	}
@@ -16,7 +15,7 @@ func (r *Repository) CreateUser(user *model.User) error {
 
 func (r *Repository) GetUser(where interface{}) (*model.User, error) {
 	var user model.User
-	err := r.Get(where, &user)
+	err := r.get(where, &user)
 	if err != nil {
 		return nil, err
 	}
@@ -24,32 +23,36 @@ func (r *Repository) GetUser(where interface{}) (*model.User, error) {
 }
 
 func (r *Repository) UpdateUser(values interface{}, where interface{}) error {
-	if err := r.Update(&model.User{}, where, values); err != nil {
+	if err := r.update(&model.User{}, where, values); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (r *Repository) DeleteUser(id uint32) error {
-	if err := r.Delete(&model.User{}, &model.User{Model: &model.Model{ID: id}}); err != nil {
+	if err := r.delete(&model.User{}, &model.User{Model: &model.Model{ID: id}}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *Repository) GetUserList(page, pageSize int, where interface{}) ([]*model.User, error) {
+func (r *Repository) GetUserList(page, pageSize int, where interface{}) ([]*model.User, int64, error) {
 	var users []*model.User
-	offset:=app.GetPageOffset(page, pageSize)
-	err := r.List(&users, where, offset, pageSize)
+	offset := app.GetPageOffset(page, pageSize)
+	err := r.list(&users, where, offset, pageSize)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return users, nil
+	total, err := r.count(&model.User{}, where)
+	if err != nil {
+		return nil, 0, err
+	}
+	return users, total, nil
 }
 
 func (r *Repository) GetUserAvatar(where interface{}) (string, error) {
 	var user model.User
-	err := r.Get(where, &user)
+	err := r.get(where, &user)
 	if err != nil {
 		return "", err
 	}
@@ -58,7 +61,7 @@ func (r *Repository) GetUserAvatar(where interface{}) (string, error) {
 
 func (r *Repository) GetUserID(where interface{}) (uint32, error) {
 	var user model.User
-	err := r.Get(where, &user)
+	err := r.get(where, &user)
 	if err != nil {
 		return 0, err
 	}
@@ -67,7 +70,7 @@ func (r *Repository) GetUserID(where interface{}) (uint32, error) {
 
 func (r *Repository) CheckUser(where interface{}) (bool, error) {
 	var user model.User
-	err := r.Get(where, &user)
+	err := r.get(where, &user)
 	if err != nil {
 		return false, err
 	}

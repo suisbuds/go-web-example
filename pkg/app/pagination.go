@@ -6,7 +6,7 @@ import (
 	"github.com/suisbuds/miao/pkg/convert"
 )
 
-// 对接口返回的结果进行分页处理
+// 分页查询
 
 func GetPage(c *gin.Context) int {
 	page := convert.ConvertStr(c.Query("page")).MustInt()

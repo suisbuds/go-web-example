@@ -16,42 +16,42 @@ func New(engine *gorm.DB) *Repository {
 	}
 }
 
-func (r *Repository) Create(value interface{}) error {
+func (r *Repository) create(value interface{}) error {
 	if err := r.engine.Create(value).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *Repository) Get(where interface{}, out interface{}) error {
+func (r *Repository) get(where interface{}, out interface{}) error {
 	if err := r.engine.Where(where).First(out).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *Repository) Update(model interface{}, where interface{}, values interface{}) error {
+func (r *Repository) update(model interface{}, where interface{}, values interface{}) error {
 	if err := r.engine.Model(model).Where(where).Updates(values).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *Repository) Delete(model interface{}, where interface{}) error {
+func (r *Repository) delete(model interface{}, where interface{}) error {
 	if err := r.engine.Where(where).Delete(model).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *Repository) List(out interface{}, where interface{}, pageOffset, pageSize int) error {
+func (r *Repository) list(out interface{}, where interface{}, pageOffset, pageSize int) error {
 	if err := r.engine.Where(where).Offset(pageOffset).Limit(pageSize).Find(out).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *Repository) Count(model interface{}, where interface{}) (int64, error) {
+func (r *Repository) count(model interface{}, where interface{}) (int64, error) {
 	var count int64
 	if err := r.engine.Model(model).Where(where).Count(&count).Error; err != nil {
 		return 0, err
@@ -61,13 +61,13 @@ func (r *Repository) Count(model interface{}, where interface{}) (int64, error) 
 
 // 事务
 
-func (r *Repository) Save(value interface{}) error {
+func (r *Repository) save(value interface{}) error {
 	if err := r.engine.Save(value).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *Repository) BeginTransaction() *gorm.DB {
+func (r *Repository) beginTransaction() *gorm.DB {
 	return r.engine.Begin()
 }

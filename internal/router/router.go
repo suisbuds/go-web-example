@@ -15,7 +15,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// Router 层负责注册路由, 调用 API 端点, 利用对应 Handlers 处理 HTTP 请求, 并进行参数校验
+// Router 层负责注册路由, 调用 API Controller 
 
 // 针对 auth 路由接口限流
 var authLimiter = limiter.NewRouteLimiter().AddBuckets(
@@ -45,44 +45,50 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Translations())                                   // 翻译错误信息
 	r.Use(middleware.AppInfo())                                        // 获取应用信息
 
-	// 注册 API 端点
+	// 注册 api 路由端点
+	user:=v1.NewUser()
 	article := v1.NewArticle()
 	tag := v1.NewTag()
 	upload := api.NewUpload()
 
-	// 注册路由接口请求并配置相应 Handlers
+	// 注册 api 路由接口
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // 注册 GET 请求 swagger 文档路由
 	r.POST("/upload/file", upload.UploadFile)                            // 注册 POST 请求文件上传路由
 	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))    // 设置静态文件服务: 将 /static 路径映射到服务器的 UploadSavePath 目录, 然后通过访问 /static URL 获取上传的静态文件
 	r.POST("/auth", api.GetAuth)                                         // 注册 POST 请求认证路由
 
-	// 注册路由组, 定义路由组接口
+	// 注册路由组
 	apiv1 := r.Group("/api/v1")
 
-	//  分组路由中间件注册
-	if global.ServerSetting.RunMode == "debug" {
-		// 针对 apiv1 路由组使用 JWT
-		apiv1.Use(middleware.JWT())
-	}
+	//  分组注册中间件
+	// if global.ServerSetting.RunMode == "debug" {
+	// 	apiv1.Use(middleware.JWT())
+	// }
 
 	{
-		// 注册 Tag & Article 路由接口并配置 Handlers
+		// 根据接口注解调用
 
-		// 测试 Tag 接口: 创建 Tag, 获取 Tag 列表, 更新 Tag, 删除 Tag
+		// 注册 Tag 接口
 		apiv1.POST("/tags", tag.CreateTag)
 		apiv1.GET("/tags", tag.GetTagList)
 		apiv1.PUT("/tags/:id", tag.UpdateTag)
 		apiv1.PATCH("/tags/:id/state", tag.UpdateTag)
 		apiv1.DELETE("/tags/:id", tag.DeleteTag)
 
-		// 验证 Article 接口时必须确保 TagID 和 ArticleID 的对应, 并且根据接口文档调用 (定义好接口后再生成接口文档)
-		// 测试 Article 接口: 创建 Article, 获取指定 Article, 获取 Article 列表, 更新 Article, 删除 Article
+		// 注册 Article 接口
 		apiv1.POST("/articles", article.CreateArticle)
 		apiv1.GET("/articles/:id", article.GetArticle)
 		apiv1.GET("/articles", article.GetArticleList)
 		apiv1.PUT("/articles/:id", article.UpdateArticle)
 		apiv1.PATCH("/articles/:id/state", article.UpdateArticle)
 		apiv1.DELETE("/articles/:id", article.DeleteArticle)
+
+		// 注册 User 接口
+		apiv1.POST("/user", user.CreateUser)
+		apiv1.GET("/user/:id", user.GetUser)
+		apiv1.GET("/user", user.GetUserList)
+		apiv1.PUT("/user/:id", user.UpdateUser)
+		apiv1.DELETE("/user/:id", user.DeleteUser)
 	}
 
 	return r

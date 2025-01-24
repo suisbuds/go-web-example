@@ -2,7 +2,7 @@ package convert
 
 import "strconv"
 
-// 对接口返回的结果进行类型转换	
+// 对接口参数进行类型转换	
 
 type ConvertStr string
 

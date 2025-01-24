@@ -1,17 +1,24 @@
 import request from '@/utils/request'
 
-export function getList(params) {
-  return request({
-    url: '/api/v1/user/list',
-    method: 'get',
-    params
-  })
-}
-
 export function createUser(data) {
   return request({
     url: '/api/v1/user',
     method: 'post',
+    data
+  })
+}
+
+export function getUser(id) {
+  return request({
+    url: '/api/v1/user/' + id,
+    method: 'get'
+  })
+}
+
+export function getList(data) {
+  return request({
+    url: '/api/v1/user',
+    method: 'get',
     data
   })
 }
@@ -26,7 +33,7 @@ export function updateUser(data) {
 
 export function deleteUser(data) {
   return request({
-    url: '/api/v1/user/' + data,
+    url: '/api/v1/user/',
     method: 'delete',
     data
   })

@@ -3,7 +3,6 @@ package model
 import (
 	"time"
 
-	"github.com/suisbuds/miao/pkg/app"
 	"gorm.io/gorm"
 )
 
@@ -20,11 +19,4 @@ type Model struct {
 	State      uint8          `gorm:"not null;default:1" json:"state"`
 }
 
-func (m Model) TableName() string {
-	return "model"
-}
 
-type ModelSwagger struct {
-	List  []*Model
-	Pager *app.Pager
-}

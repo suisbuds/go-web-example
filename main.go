@@ -60,7 +60,6 @@ func main() {
 		WriteTimeout:   global.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
-	
 
 	s.ListenAndServe()
 
@@ -184,5 +183,3 @@ func setupValidator() error {
 	binding.Validator = global.Validator // 实现 bind.Validation 接口, 替换成 MiaoValidator
 	return nil
 }
-
-
