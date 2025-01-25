@@ -22,20 +22,6 @@ func (r *Repository) GetUser(where interface{}) (*model.User, error) {
 	return &user, nil
 }
 
-func (r *Repository) UpdateUser(values interface{}, where interface{}) error {
-	if err := r.update(&model.User{}, where, values); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (r *Repository) DeleteUser(id uint32) error {
-	if err := r.delete(&model.User{}, &model.User{Model: &model.Model{ID: id}}); err != nil {
-		return err
-	}
-	return nil
-}
-
 func (r *Repository) GetUserList(page, pageSize int, where interface{}) ([]*model.User, int64, error) {
 	var users []*model.User
 	offset := app.GetPageOffset(page, pageSize)
@@ -50,6 +36,20 @@ func (r *Repository) GetUserList(page, pageSize int, where interface{}) ([]*mode
 	return users, total, nil
 }
 
+func (r *Repository) UpdateUser(values interface{}, where interface{}) error {
+	if err := r.update(&model.User{}, where, values); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *Repository) DeleteUser(where interface{}) error {
+	if err := r.delete(&model.User{}, where); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (r *Repository) GetUserAvatar(where interface{}) (string, error) {
 	var user model.User
 	err := r.get(where, &user)
@@ -57,15 +57,6 @@ func (r *Repository) GetUserAvatar(where interface{}) (string, error) {
 		return "", err
 	}
 	return user.Avatar, nil
-}
-
-func (r *Repository) GetUserID(where interface{}) (uint32, error) {
-	var user model.User
-	err := r.get(where, &user)
-	if err != nil {
-		return 0, err
-	}
-	return user.ID, nil
 }
 
 func (r *Repository) CheckUser(where interface{}) (bool, error) {

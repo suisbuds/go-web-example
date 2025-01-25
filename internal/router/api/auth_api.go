@@ -9,7 +9,7 @@ import (
 	"github.com/suisbuds/miao/pkg/logger"
 )
 
-// jwt-auth API 端点
+// 接口鉴权
 
 func GetAuth(c *gin.Context) {
 	param := service.AuthRequest{}
@@ -40,3 +40,5 @@ func GetAuth(c *gin.Context) {
 		"token": token,
 	})
 }
+
+

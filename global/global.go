@@ -10,7 +10,6 @@ import (
 )
 
 var (
-	// Settings
 	ServerSetting   *setting.ServerSetting
 	AppSetting      *setting.AppSetting
 	DatabaseSetting *setting.DatabaseSetting
@@ -18,15 +17,12 @@ var (
 	Zapper          *zap.SugaredLogger
 	Accesser        *logger.Logger
 
-	// Database
 	DBEngine *gorm.DB
 
-	// JWT
 	JWTSetting *setting.JWTSetting
 	
 	EmailSetting *setting.EmailSetting
 
-	// Validator
 	Validator *validator.MiaoValidator
 
 )

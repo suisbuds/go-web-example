@@ -111,7 +111,7 @@ CREATE TABLE mio_article (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ,
-    state SMALLINT NOT NULL DEFAULT 1, -- 0草稿、1发布、2删除
+    state SMALLINT NOT NULL DEFAULT 1, -- 0删除、1发布、2草稿
     
     tag_id INT DEFAULT 0,
     title VARCHAR(100) DEFAULT '',

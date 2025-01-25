@@ -43,9 +43,10 @@ type DatabaseSetting struct {
 }
 
 type JWTSetting struct {
-	Secret string
-	Issuer string
-	Expire time.Duration
+	Secret      string
+	Issuer      string
+	Timeout     time.Duration
+	MaxRefresh  time.Duration
 }
 
 type EmailSetting struct {

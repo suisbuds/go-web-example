@@ -22,9 +22,10 @@ var (
 	ErrorGetUserFail       = NewError(20030002, "获取用户失败")
 	ErrorUpdateUserFail    = NewError(20030003, "更新用户失败")
 	ErrorDeleteUserFail    = NewError(20030004, "删除用户失败")
-	ErrorCheckUserFail     = NewError(20030005, "验证用户失败")
-	ErrorGetUserListFail   = NewError(20030006, "获取用户列表失败")
-	ErrorGetUserAvatarFail = NewError(20030007, "获取用户头像失败")
+	ErrorGetUserListFail   = NewError(20030005, "获取用户列表失败")
+	ErrorCheckUserFail     = NewError(20030006, "验证用户失败")
+	ErrorCheckUsernameFail = NewError(20030007, "验证用户名失败")
+	ErrorGetUserAvatarFail = NewError(20030008, "获取用户头像失败")
 )
 
 var (

@@ -11,7 +11,7 @@ type Auth struct {
 }
 
 func (a Auth) TableName() string {
-	return "miao_auth"
+	return "mio_auth"
 }
 
 // 验证传入的认证信息

@@ -95,7 +95,8 @@ func setupSetting() error {
 
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
-	global.JWTSetting.Expire *= time.Second
+	global.JWTSetting.Timeout *= time.Second
+	global.JWTSetting.MaxRefresh *= time.Second
 	global.AppSetting.ContextTimeout *= time.Second
 
 	return nil
