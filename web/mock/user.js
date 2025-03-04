@@ -49,7 +49,7 @@ export default [
 
   // get user info
   {
-    url: '/user/info\.*',
+    url: '/api/auth/user/info\.*',
     type: 'get',
     response: config => {
       const { token } = config.query

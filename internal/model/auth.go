@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 // 鉴权表模型, 记录 JWT 令牌认证信息
 
 type Auth struct {
-	*Model
+	gorm.Model
 	AppKey    string `json:"app_key"`
 	AppSecret string `json:"app_secret"`
 }

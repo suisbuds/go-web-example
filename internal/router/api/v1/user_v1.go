@@ -1,8 +1,10 @@
 package v1
 
 import (
+	"github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
 	"github.com/suisbuds/miao/global"
+	"github.com/suisbuds/miao/internal/model"
 	"github.com/suisbuds/miao/internal/service"
 	"github.com/suisbuds/miao/pkg/app"
 	"github.com/suisbuds/miao/pkg/errcode"
@@ -184,4 +186,29 @@ func (u User) DeleteUser(c *gin.Context) {
 	}
 
 	response.ToResponse(gin.H{"message": "delete user success"})
+}
+
+// @Summary 获取用户信息
+func (u User) GetUserInfo(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	response := app.NewResponse(c)
+
+	username, ok := claims["username"].(string)
+	if !ok {
+		response.ToErrorResponse(errcode.ErrorGetUserInfoFail)
+		return
+	}
+	svc := service.New(c.Request.Context())
+	req := service.GetUserRequest{Username: username}
+	user, err := svc.GetUser(&req)
+	if err != nil {
+		global.Logger.Logf(logger.ERROR, logger.SINGLE, "svc.GetUser err: %v", err)
+		response.ToErrorResponse(errcode.ErrorGetUserFail)
+		return
+	}
+	userInfo:=model.UserInfo{
+		Username: user.Username,
+		Avatar:   user.Avatar,
+	}
+	response.ToResponse(userInfo)
 }

@@ -40,7 +40,9 @@ func (d *database) connect(databaseSetting *setting.DatabaseSetting) error {
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 		},
+		DisableForeignKeyConstraintWhenMigrating: true,
 	})
+
 	if err != nil {
 		return err
 	}
@@ -56,12 +58,24 @@ func (d *database) connect(databaseSetting *setting.DatabaseSetting) error {
 	sqlDB.SetMaxOpenConns(global.DatabaseSetting.MaxOpenConns)
 
 	d.DB = db
-
+	// 自动迁移表
+	d.autoMigrate()
+	
 	return nil
 }
 
 func (d *database) getDB() *gorm.DB {
 	return d.DB
+}
+
+func (d *database) autoMigrate() {
+	d.AutoMigrate(
+		&User{},
+		&Role{},
+		&Menu{},
+		&Api{},
+		&Operation{},
+	)
 }
 
 func NewDBEngine(databaseSetting *setting.DatabaseSetting) (*gorm.DB, error) {

@@ -15,11 +15,11 @@ import (
 
 func InitJWT() *jwt.GinJWTMiddleware {
 	return &jwt.GinJWTMiddleware{
-		Realm:       "miao", // 中间件名称
+		Realm:       global.JWTSetting.Realm, // 中间件名称
 		Key:         []byte(global.JWTSetting.Secret),
-		Timeout:     global.JWTSetting.Timeout, // token 过期时间
-		MaxRefresh:  global.JWTSetting.MaxRefresh,
-		PayloadFunc: payloadFunc(), // 登陆回调
+		Timeout:     global.JWTSetting.Timeout,    // token 过期时间
+		MaxRefresh:  global.JWTSetting.MaxRefresh, // token 刷新时间
+		PayloadFunc: payloadFunc(),                // 登陆回调
 
 		Authenticator: authenticator(),                                    // 根据登陆信息验证用户
 		Authorizator:  authorizator(),                                     // 控制用户权限
@@ -75,8 +75,8 @@ func authorizator() func(data interface{}, c *gin.Context) bool {
 func unauthorized() func(c *gin.Context, code int, message string) {
 	return func(c *gin.Context, code int, message string) {
 		c.JSON(code, gin.H{
-			"code":    code,
-			"message": message,
+			"code":    errcode.Unauthorized.Code,
+			"message": errcode.Unauthorized.Msg,
 		})
 	}
 }

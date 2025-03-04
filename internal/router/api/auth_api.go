@@ -40,5 +40,3 @@ func GetAuth(c *gin.Context) {
 		"token": token,
 	})
 }
-
-

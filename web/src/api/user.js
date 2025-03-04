@@ -49,7 +49,7 @@ export function login(data) {
 
 export function getInfo() {
   return request({
-    url: '/user/info',
+    url: '/api/auth/user/info',
     method: 'get'
   })
 }

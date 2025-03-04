@@ -47,6 +47,7 @@ type JWTSetting struct {
 	Issuer      string
 	Timeout     time.Duration
 	MaxRefresh  time.Duration
+	Realm	   string
 }
 
 type EmailSetting struct {

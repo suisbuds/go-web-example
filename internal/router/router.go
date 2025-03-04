@@ -54,6 +54,7 @@ func NewRouter() *gin.Engine {
 	jwt := middleware.InitJWT()
 
 	// 注册 api 路由接口
+	// r.NoRoute(jwt.MiddlewareFunc(), api.NoRouteHandler) // 404
 	r.POST("/login", jwt.LoginHandler)                                   // 注册 POST 请求登录路由
 	r.GET("/refresh", jwt.RefreshHandler)                                // 注册 GET 请求刷新令牌路由
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // 注册 GET 请求 swagger 文档路由
@@ -63,11 +64,13 @@ func NewRouter() *gin.Engine {
 
 	// 注册路由组, 分组注册中间件
 	apiAuth := r.Group("/api/auth")
+	apiv1 := r.Group("/api/v1")
+
 	apiAuth.Use(jwt.MiddlewareFunc()) // JWT 中间件
 
-	apiv1 := r.Group("/api/v1")
 	{
 		// 根据接口注解调用
+		apiAuth.GET("/user/info", user.GetUserInfo)
 
 		// 注册 Tag 接口
 		apiv1.POST("/tags", tag.CreateTag)
